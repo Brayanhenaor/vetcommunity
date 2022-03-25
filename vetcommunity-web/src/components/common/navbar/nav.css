@@ -1,0 +1,16 @@
+.activated {
+    color: #4453FE !important;
+    font-weight: bold;
+}
+
+.activated::before {
+    content: "";
+    display: block;
+    width: 100%;
+    margin-bottom: -13px;
+    height: 3px;
+    border-radius: 10px;
+    background-color: #4453FE;
+    position: absolute;
+    bottom: 0;
+}
