@@ -70,12 +70,12 @@ export const Post = () => {
                 sx={{ p: 2 }}
                 style={{ backgroundColor: color.primary, width: '100%' }}>
 
-                <Grid container item xs={1} alignItems={'center'} direction='column'>
+                <Grid container item xs={2} alignItems={'center'} direction='column'>
                     <Avatar style={{ backgroundColor: 'red' }} alt="Brayan" src="https://caricom.org/wp-content/uploads/Floyd-Morris-Remake-1024x879-1.jpg" />
                     <Raking raking={72} />
                 </Grid>
 
-                <Grid container item xs={11}>
+                <Grid container item xs={10}>
                     <Grid item xs={12} alignItems="flex-start">
                         <div>
                             <Name>Samanta wolf</Name>
