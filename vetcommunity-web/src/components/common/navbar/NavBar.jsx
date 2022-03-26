@@ -5,13 +5,15 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBars, faBell, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
+import { faBars, faBell, faClipboardQuestion, faHouse, faMagnifyingGlass, faUser } from '@fortawesome/free-solid-svg-icons';
 import { color } from '../../../utils/color';
-import { Avatar, Badge, InputBase, styled, TextField } from '@mui/material';
+import { Avatar, Badge, BottomNavigation, BottomNavigationAction, InputBase, Paper, styled, TextField } from '@mui/material';
 import './nav.css';
 import { route } from '../../../router/routes';
 import { NavLink } from './NavLink';
 import { Notifications } from './Notifications';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Li = styled('li')({
     textDecoration: 'none',
@@ -64,61 +66,82 @@ const menu = [
 ]
 
 export const Navbar = () => {
+    const [value, setValue] = useState(0);
+    const navigate = useNavigate();
+
     return (
-        <Box sx={{ flexGrow: 1 }}>
-            <AppBar position="static" elevation={0}>
-                <Toolbar sx={{ bgcolor: 'white', display: 'flex', justifyContent: 'space-between' }} >
-                    <IconButton
-                        size="large"
-                        edge="start"
-                        color="inherit"
-                        aria-label="menu"
-                        sx={{ mr: 2 }}
-                    >
-                        <FontAwesomeIcon icon={faBars} beat color={color.secondary} />
-                    </IconButton>
-
-                    <Ul
-                        sx={{
-                            display: { xs: 'none', sm: 'flex' }
-                        }}>
-                        {menu.map(({ title, to }) => (
-                            <Box component="div" sx={{ p: { md: '0px 22px', xs: '0px 10px' } }}
-                                key={to}>
-                                <Li>
-                                    <StyledNavLink
-                                        activeClassName="activated"
-                                        to={to}>
-                                        {title}
-                                    </StyledNavLink>
-                                </Li>
-                            </Box>
-                        ))}
-                    </Ul>
+        <>
+            <Box sx={{ flexGrow: 1 }}>
+                <AppBar position="static" elevation={0}>
+                    <Toolbar sx={{ bgcolor: 'white', display: 'flex', justifyContent: 'space-between' }} >
 
 
-                    <div
-                        style={{ display: 'flex', alignItems: 'center' }}>
-                        <div style={{
-                            border: `0.5px solid ${color.lightGray}`,
-                            borderRadius: '20px',
-                            display: 'flex',
-                            alignItems: 'center',
-                            marginLeft: 20,
-                            marginRight: 10,
-                            padding: '6px 15px'
-                        }}>
-                            <FontAwesomeIcon icon={faMagnifyingGlass} color={color.lightGray} style={{ paddingRight: 10 }} />
-                            <StyledInputBase placeholder='Buscar...' />
+                        <IconButton
+                            size="large"
+                            edge="start"
+                            color="inherit"
+                            aria-label="menu"
+                            sx={{ mr: 2 }}
+                        >
+                            <FontAwesomeIcon icon={faBars} beat color={color.secondary} />
+                        </IconButton>
+
+
+                        <Ul
+                            sx={{
+                                display: { xs: 'none', md: 'flex' }
+                            }}>
+                            {menu.map(({ title, to }) => (
+                                <Box component="div" sx={{ p: { md: '0px 22px', xs: '0px 10px' } }}
+                                    key={to}>
+                                    <Li>
+                                        <StyledNavLink
+                                            activeClassName="activated"
+                                            to={to}>
+                                            {title}
+                                        </StyledNavLink>
+                                    </Li>
+                                </Box>
+                            ))}
+                        </Ul>
+
+
+                        <div
+                            style={{ display: 'flex', alignItems: 'center' }}>
+                            <div style={{
+                                border: `0.5px solid ${color.lightGray}`,
+                                borderRadius: '20px',
+                                display: 'flex',
+                                alignItems: 'center',
+                                marginLeft: 20,
+                                marginRight: 10,
+                                padding: '6px 15px'
+                            }}>
+                                <FontAwesomeIcon icon={faMagnifyingGlass} color={color.lightGray} style={{ paddingRight: 10 }} />
+                                <StyledInputBase placeholder='Buscar...' />
+                            </div>
+
+                            <Avatar alt="Brayan" src="https://caricom.org/wp-content/uploads/Floyd-Morris-Remake-1024x879-1.jpg" />
+
+                            <Notifications />
                         </div>
 
-                        <Avatar alt="Brayan" src="https://caricom.org/wp-content/uploads/Floyd-Morris-Remake-1024x879-1.jpg" />
-
-                        <Notifications />
-                    </div>
-
-                </Toolbar>
-            </AppBar>
-        </Box>
+                    </Toolbar>
+                </AppBar>
+            </Box>
+            <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0, display: { md: 'none' } }} elevation={3}>
+                <BottomNavigation
+                    value={value}
+                    onChange={(event, newValue) => {
+                        setValue(newValue);
+                        navigate(newValue);
+                    }}
+                >
+                    <BottomNavigationAction value={route.home} label="Inicio" icon={<FontAwesomeIcon icon={faHouse} size='lg' />} />
+                    <BottomNavigationAction value={route.myQuestions} label="Mis preguntas" icon={<FontAwesomeIcon icon={faClipboardQuestion} size='lg' />} />
+                    <BottomNavigationAction value={route.profile} label="Perfil" icon={<FontAwesomeIcon icon={faUser} size='lg' />} />
+                </BottomNavigation>
+            </Paper>
+        </>
     )
 }
