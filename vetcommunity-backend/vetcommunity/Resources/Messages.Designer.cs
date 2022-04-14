@@ -58,6 +58,15 @@ namespace vetcommunity.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Se publicó el post exitosamente.
+        /// </summary>
+        internal static string PostPublished {
+            get {
+                return ResourceManager.GetString("PostPublished", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Verifique el email y contraseña.
         /// </summary>
         internal static string UserNotFound {

@@ -16,6 +16,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.4" />
   </ItemGroup>
 
   <ItemGroup>
@@ -32,6 +33,9 @@
     <None Remove="DTOs\Request\" />
     <None Remove="DTOs\Response\" />
     <None Remove="Resources\" />
+    <None Remove="Filters\" />
+    <None Remove="Microsoft.AspNetCore.Mvc.NewtonsoftJson" />
+    <None Remove="Profiles\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Data\" />
@@ -41,6 +45,8 @@
     <Folder Include="DTOs\Request\" />
     <Folder Include="DTOs\Response\" />
     <Folder Include="Resources\" />
+    <Folder Include="Filters\" />
+    <Folder Include="Profiles\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Update="Resources\Messages.resx">

@@ -15,4 +15,7 @@
 	<data name="UserNotFound" xml:space="preserve">
 		<value>Verifique el email y contraseña</value>
 	</data>
+	<data name="PostPublished" xml:space="preserve">
+		<value>Se publicó el post exitosamente</value>
+	</data>
 </root>
