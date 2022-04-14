@@ -1,4 +1,6 @@
-﻿namespace vetcommunity;
+﻿using vetcommunity.Data;
+
+namespace vetcommunity;
 
 public class WeatherForecast
 {

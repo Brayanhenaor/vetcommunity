@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using vetcommunity.Data;
 
 namespace vetcommunity.Controllers;
 
@@ -13,7 +14,7 @@ public class WeatherForecastController : ControllerBase
 
     private readonly ILogger<WeatherForecastController> _logger;
 
-    public WeatherForecastController(ILogger<WeatherForecastController> logger)
+    public WeatherForecastController(ILogger<WeatherForecastController> logger, DataContext dataContext)
     {
         _logger = logger;
     }

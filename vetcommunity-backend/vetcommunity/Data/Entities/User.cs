@@ -8,6 +8,8 @@
         public string AboutMe { get; set; }
 
         public ICollection<Post> Posts { get; set; }
+        public ICollection<PostPinned> PostPinneds { get; set; }
+        public ICollection<CommentLike> CommentLikes { get; set; }
     }
 }
 

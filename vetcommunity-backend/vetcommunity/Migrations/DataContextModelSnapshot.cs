@@ -22,6 +22,21 @@ namespace vetcommunity.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
+            modelBuilder.Entity("CategoryPost", b =>
+                {
+                    b.Property<int>("CategoriesId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PostId")
+                        .HasColumnType("int");
+
+                    b.HasKey("CategoriesId", "PostId");
+
+                    b.HasIndex("PostId");
+
+                    b.ToTable("CategoryPost");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -242,6 +257,24 @@ namespace vetcommunity.Migrations
                     b.ToTable("Categories");
                 });
 
+            modelBuilder.Entity("vetcommunity.Data.Entities.CommentLike", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("PostCommentId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("Recommended")
+                        .HasColumnType("bit");
+
+                    b.HasKey("UserId", "PostCommentId");
+
+                    b.HasIndex("PostCommentId");
+
+                    b.ToTable("CommentLikes");
+                });
+
             modelBuilder.Entity("vetcommunity.Data.Entities.Notification", b =>
                 {
                     b.Property<int>("Id")
@@ -299,6 +332,47 @@ namespace vetcommunity.Migrations
                     b.ToTable("Posts");
                 });
 
+            modelBuilder.Entity("vetcommunity.Data.Entities.PostComment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Comment")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PostId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PostId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("PostComments");
+                });
+
+            modelBuilder.Entity("vetcommunity.Data.Entities.PostPinned", b =>
+                {
+                    b.Property<int>("PostId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("PostId", "UserId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("PostPinned");
+                });
+
             modelBuilder.Entity("vetcommunity.Data.Entities.User", b =>
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
@@ -310,6 +384,21 @@ namespace vetcommunity.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasDiscriminator().HasValue("User");
+                });
+
+            modelBuilder.Entity("CategoryPost", b =>
+                {
+                    b.HasOne("vetcommunity.Data.Entities.Category", null)
+                        .WithMany()
+                        .HasForeignKey("CategoriesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("vetcommunity.Data.Entities.Post", null)
+                        .WithMany()
+                        .HasForeignKey("PostId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -363,6 +452,25 @@ namespace vetcommunity.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("vetcommunity.Data.Entities.CommentLike", b =>
+                {
+                    b.HasOne("vetcommunity.Data.Entities.PostComment", "PostComment")
+                        .WithMany("CommentLikes")
+                        .HasForeignKey("PostCommentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("vetcommunity.Data.Entities.User", "User")
+                        .WithMany("CommentLikes")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("PostComment");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("vetcommunity.Data.Entities.Notification", b =>
                 {
                     b.HasOne("vetcommunity.Data.Entities.User", "User")
@@ -381,8 +489,58 @@ namespace vetcommunity.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("vetcommunity.Data.Entities.PostComment", b =>
+                {
+                    b.HasOne("vetcommunity.Data.Entities.Post", "Post")
+                        .WithMany()
+                        .HasForeignKey("PostId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("vetcommunity.Data.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("Post");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("vetcommunity.Data.Entities.PostPinned", b =>
+                {
+                    b.HasOne("vetcommunity.Data.Entities.Post", "Post")
+                        .WithMany("PostPinneds")
+                        .HasForeignKey("PostId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("vetcommunity.Data.Entities.User", "User")
+                        .WithMany("PostPinneds")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Post");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("vetcommunity.Data.Entities.Post", b =>
+                {
+                    b.Navigation("PostPinneds");
+                });
+
+            modelBuilder.Entity("vetcommunity.Data.Entities.PostComment", b =>
+                {
+                    b.Navigation("CommentLikes");
+                });
+
             modelBuilder.Entity("vetcommunity.Data.Entities.User", b =>
                 {
+                    b.Navigation("CommentLikes");
+
+                    b.Navigation("PostPinneds");
+
                     b.Navigation("Posts");
                 });
 #pragma warning restore 612, 618
