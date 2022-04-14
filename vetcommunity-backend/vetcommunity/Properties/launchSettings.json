@@ -4,17 +4,17 @@
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://localhost:21823",
-      "sslPort": 44352
+      "applicationUrl": "http://localhost:23877",
+      "sslPort": 44344
     }
   },
   "profiles": {
-    "vetquestions": {
+    "vetcommunity": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,
       "launchUrl": "swagger",
-      "applicationUrl": "https://localhost:7038;http://localhost:5131",
+      "applicationUrl": "https://localhost:7296;http://localhost:5018",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 25.0.1700.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "vetcommunity", "vetquestions\vetcommunity.csproj", "{8ABAFD87-9E75-4E63-807E-8E40D0F4444D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "vetcommunity", "vetcommunity\vetcommunity.csproj", "{95E4FD5C-0ECD-4AC3-A62F-0F05D87ED7E1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{8ABAFD87-9E75-4E63-807E-8E40D0F4444D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8ABAFD87-9E75-4E63-807E-8E40D0F4444D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8ABAFD87-9E75-4E63-807E-8E40D0F4444D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8ABAFD87-9E75-4E63-807E-8E40D0F4444D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{95E4FD5C-0ECD-4AC3-A62F-0F05D87ED7E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{95E4FD5C-0ECD-4AC3-A62F-0F05D87ED7E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{95E4FD5C-0ECD-4AC3-A62F-0F05D87ED7E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{95E4FD5C-0ECD-4AC3-A62F-0F05D87ED7E1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {F375CAE0-17F6-4AD5-9440-128B81F020DD}
+		SolutionGuid = {CC2D7627-511F-4C4D-9009-4E6EA2D523FA}
 	EndGlobalSection
 EndGlobal

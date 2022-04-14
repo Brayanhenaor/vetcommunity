@@ -1,4 +1,4 @@
-﻿namespace vetquestions;
+﻿namespace vetcommunity;
 
 public class WeatherForecast
 {

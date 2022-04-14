@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace vetquestions.Controllers;
+namespace vetcommunity.Controllers;
 
 [ApiController]
 [Route("[controller]")]
