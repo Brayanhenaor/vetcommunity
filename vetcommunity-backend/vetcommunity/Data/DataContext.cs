@@ -1,10 +1,12 @@
 ﻿namespace vetcommunity.Data
 {
+    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore;
     using vetcommunity.Data.Entities;
+    using vetcommunity.Enums;
 
-    public class DataContext : IdentityDbContext
+    public class DataContext : IdentityDbContext<User>
     {
         public DbSet<Post> Posts { get; set; }
         public DbSet<Notification> Notifications { get; set; }
@@ -16,33 +18,63 @@
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            base.OnModelCreating(builder);
-
             builder.Entity<PostPinned>().HasKey(pp => new { pp.PostId, pp.UserId });
-
-            builder.Entity<PostPinned>()
-                .HasOne(pp => pp.Post)
-                .WithMany(p => p.PostPinneds)
-                .HasForeignKey(pp => pp.PostId);
-
-
-            builder.Entity<PostPinned>()
-                .HasOne(pp => pp.User)
-                .WithMany(u => u.PostPinneds)
-                .HasForeignKey(pp => pp.UserId);
 
             builder.Entity<CommentLike>().HasKey(cl => new { cl.UserId, cl.PostCommentId });
 
-            builder.Entity<CommentLike>()
-                .HasOne(cl => cl.PostComment)
-                .WithMany(pc => pc.CommentLikes)
-                .HasForeignKey(cl => cl.PostCommentId);
+            string adminId = Guid.NewGuid().ToString();
+            string normalId = Guid.NewGuid().ToString();
+            string vetId = Guid.NewGuid().ToString();
 
+            string userId = Guid.NewGuid().ToString();
 
-            builder.Entity<CommentLike>()
-                .HasOne(cl => cl.User)
-                .WithMany(u => u.CommentLikes)
-                .HasForeignKey(cl => cl.UserId);
+            SeedRoles(builder, adminId, normalId, vetId);
+            SeedAdminUser(builder, userId, adminId);
+
+            base.OnModelCreating(builder);
+        }
+
+        public void SeedRoles(ModelBuilder builder, string adminId, string normalId, string vetId)
+        {
+            builder.Entity<IdentityRole>().HasData(new List<IdentityRole>
+            {
+              new IdentityRole {
+                Id = adminId,
+                Name = UserRole.Admin.ToString(),
+                NormalizedName = UserRole.Admin.ToString().ToUpper()
+              },
+              new IdentityRole {
+                Id = normalId,
+                Name = UserRole.Normal.ToString(),
+                NormalizedName = UserRole.Normal.ToString().ToUpper()
+              },
+              new IdentityRole {
+                Id = vetId,
+                Name = UserRole.Vet.ToString(),
+                NormalizedName = UserRole.Vet.ToString().ToUpper()
+              },
+            });
+        }
+
+        public void SeedAdminUser(ModelBuilder builder, string userId, string adminId)
+        {
+            PasswordHasher<User> hasher = new PasswordHasher<User>();
+
+            builder.Entity<User>().HasData(new User
+            {
+                Id = userId,
+                UserName = "admin@admin.com",
+                NormalizedUserName = "ADMIN@ADMIN.COM",
+                PasswordHash = hasher.HashPassword(null, "591236bh!"),
+            });
+
+            builder.Entity<IdentityUserRole<string>>().HasData(
+                new IdentityUserRole<string>
+                {
+                    RoleId = adminId,
+                    UserId = userId
+                }
+            );
         }
     }
 }
