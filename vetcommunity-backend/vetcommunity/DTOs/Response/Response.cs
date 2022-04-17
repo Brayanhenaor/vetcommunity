@@ -14,8 +14,15 @@ namespace vetcommunity.DTOs.Response
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string Message { get; set; }
 
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         public Dictionary<string, List<string>> Errors { get; set; } = null;
+    }
+
+    public class PagingResponse<T> : Response<T>
+    {
+        public int Page { get; set; }
+        public int TotalRecords { get; set; }
+        public int TotalPages { get; set; }
     }
 }
 

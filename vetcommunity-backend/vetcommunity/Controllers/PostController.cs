@@ -10,6 +10,7 @@
     using vetcommunity.Data.Entities;
     using vetcommunity.DTOs.Request;
     using vetcommunity.DTOs.Response;
+    using vetcommunity.Extensions;
     using vetcommunity.Resources;
 
     [ApiController]
@@ -54,7 +55,7 @@
         }
 
         [HttpGet("MyPosts")]
-        public async Task<ActionResult<Response>> GetMyPostsAsync()
+        public async Task<ActionResult<PagingResponse<ICollection<PostResponse>>>> GetMyPostsAsync([FromQuery] PagingRequest pagingRequest)
         {
             string userToken = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name).Value;
 
@@ -66,9 +67,7 @@
                     Success = false
                 });
 
-            return new Response<ICollection<PostResponse>>
-            {
-                Result = await dataContext.Posts.Where(post => post.UserId == user.Id)
+            (int totalRecords, int page, int totalPages, ICollection<PostResponse> results) result = await dataContext.Posts.Where(post => post.UserId == user.Id)
                 .Select(post => new PostResponse
                 {
                     Id = post.Id,
@@ -79,7 +78,41 @@
                     CommentsCount = post.PostComments.Count(),
                     Categories = mapper.Map<ICollection<CategoryResponse>>(post.Categories),
                     Date = post.Date
-                }).ToListAsync()
+                }).PagingAsync(pagingRequest);
+
+
+            return new PagingResponse<ICollection<PostResponse>>
+            {
+                TotalRecords = result.totalRecords,
+                Page = result.page,
+                TotalPages = result.totalPages,
+                Result = mapper.Map<ICollection<PostResponse>>(result.results)
+            };
+        }
+
+        [HttpGet("All")]
+        public async Task<ActionResult<PagingResponse<ICollection<PostResponse>>>> GetPostsAsync([FromQuery] PagingRequest pagingRequest)
+        {
+            (int totalRecords, int page, int totalPages, ICollection<PostResponse> results) result = await dataContext.Posts
+                .Select(post => new PostResponse
+                {
+                    Id = post.Id,
+                    Title = post.Title,
+                    Message = post.Message,
+                    Ranking = post.Ranking,
+                    UrlImage = post.UrlImage,
+                    CommentsCount = post.PostComments.Count(),
+                    Categories = mapper.Map<ICollection<CategoryResponse>>(post.Categories),
+                    Date = post.Date
+                }).PagingAsync(pagingRequest);
+
+
+            return new PagingResponse<ICollection<PostResponse>>
+            {
+                TotalRecords = result.totalRecords,
+                Page = result.page,
+                TotalPages = result.totalPages,
+                Result = mapper.Map<ICollection<PostResponse>>(result.results)
             };
         }
     }

@@ -36,6 +36,7 @@
     <None Remove="Filters\" />
     <None Remove="Microsoft.AspNetCore.Mvc.NewtonsoftJson" />
     <None Remove="Profiles\" />
+    <None Remove="Extensions\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Data\" />
@@ -47,6 +48,7 @@
     <Folder Include="Resources\" />
     <Folder Include="Filters\" />
     <Folder Include="Profiles\" />
+    <Folder Include="Extensions\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Update="Resources\Messages.resx">
