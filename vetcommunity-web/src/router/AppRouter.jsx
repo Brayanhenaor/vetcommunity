@@ -11,6 +11,7 @@ import { Alert, Snackbar } from "@mui/material";
 import { type } from "../utils/types";
 import { hideSnack } from "../actions/ui";
 import { useEffect } from "react";
+import { RegisterPage } from "../components/pages/register/RegisterPage";
 
 export const AppRouter = () => {
     console.log('Ambiente', process.env.REACT_APP_API_BASE_URL);
@@ -61,6 +62,16 @@ export const AppRouter = () => {
                             navBar={false}
                             isLogued={isLogued}
                             component={LoginPage} />
+                    } />
+
+                <Route
+                    path={route.register}
+                    element={
+                        <PublicRoute
+                            restricted
+                            navBar={false}
+                            isLogued={isLogued}
+                            component={RegisterPage} />
                     } />
 
                 <Route path="*" element={<Navigate to={route.home} />} />

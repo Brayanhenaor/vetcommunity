@@ -3,4 +3,5 @@ export const route = {
     myQuestions:'/myquestions',
     profile:'/profile',
     login:'/login',
+    register:'/register',
 }

@@ -58,7 +58,7 @@ const SquareInfo = ({ icon: Icon, text }) => {
             }}>
             {Icon}
             
-            <span style={{ fontSize: 14, fontFamily: 'Open Sans', paddingLeft:4 }}>
+            <span style={{ fontSize: 14, fontFamily: 'Source Sans Pro', paddingLeft:4 }}>
                 {text}
             </span>
         </Box>
