@@ -1,4 +1,5 @@
 import React from 'react'
+import shortid from 'shortid'
 import { Post } from './Post'
 
 export const PostList = ({ posts }) => {
@@ -6,7 +7,7 @@ export const PostList = ({ posts }) => {
         <>
             {
                 posts?.map(post => (
-                    <Post post={post} />
+                    <Post key={shortid.generate()} post={post} />
                 ))
             }
         </>

@@ -90,6 +90,7 @@
             };
         }
 
+        [AllowAnonymous]
         [HttpGet("All")]
         public async Task<ActionResult<PagingResponse<ICollection<PostResponse>>>> GetPostsAsync([FromQuery] PagingRequest pagingRequest)
         {
@@ -102,6 +103,7 @@
                     Ranking = post.Ranking,
                     UrlImage = post.UrlImage,
                     CommentsCount = post.PostComments.Count(),
+                    User = mapper.Map<UserResponse>(post.User),
                     Categories = mapper.Map<ICollection<CategoryResponse>>(post.Categories),
                     Date = post.Date
                 }).PagingAsync(pagingRequest);

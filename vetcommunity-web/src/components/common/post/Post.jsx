@@ -5,6 +5,8 @@ import { color } from '../../../utils/color'
 import { Raking } from '../raking/Raking'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faComment } from '@fortawesome/free-regular-svg-icons';
+import moment from 'moment';
+import 'moment/locale/es';
 
 const Name = styled('h5')({
     margin: 0,
@@ -50,6 +52,7 @@ const SquareInfo = ({ icon: Icon, text }) => {
                 bgcolor: color.primary,
                 borderRadius: 2,
                 display: 'flex',
+                cursor:'pointer',
                 alignItems: 'center',
                 justifyContent: 'center'
             }}>
@@ -62,7 +65,8 @@ const SquareInfo = ({ icon: Icon, text }) => {
     )
 }
 
-export const Post = () => {
+export const Post = ({post:{title, message, ranking, date, commentsCount, user}}) => {
+    moment.locale('es');
     return (
         <>
             <Grid container
@@ -71,31 +75,31 @@ export const Post = () => {
                 style={{ backgroundColor: color.primary, width: '100%' }}>
 
                 <Grid container item xs={2} alignItems={'center'} direction='column'>
-                    <Avatar style={{ backgroundColor: 'red' }} alt="Brayan" src="https://caricom.org/wp-content/uploads/Floyd-Morris-Remake-1024x879-1.jpg" />
-                    <Raking raking={72} />
+                    <Avatar alt="Brayan" src={user.urlPhoto} />
+                    <Raking raking={ranking} />
                 </Grid>
 
                 <Grid container item xs={10}>
                     <Grid item xs={12} alignItems="flex-start">
                         <div>
-                            <Name>Samanta wolf</Name>
-                            <Date>Asked 25 March 2018</Date>
+                            <Name>{user.fullName}</Name>
+                            <Date>{moment(date).format('D MMMM YYYY')}</Date>
                         </div>
                     </Grid>
                     <Grid item xs={12}>
                         <Title>
-                            Duda
+                            {title}
                         </Title>
                     </Grid>
                     <Grid item xs={12}>
                         <Message>
-                            Tengo una duda con mi mascota
+                            {message}
                         </Message>
                     </Grid>
 
                     <Grid container item xs={12} alignItems='center' sx={{ bgcolor: color.lightGray2, p: 1 }}>
                         <Grid item>
-                            <SquareInfo text={'14 answers'} icon={<FontAwesomeIcon icon={faComment} />} />
+                            <SquareInfo text={`${commentsCount} respuestas`} icon={<FontAwesomeIcon icon={faComment} />} />
                         </Grid>
                     </Grid>
                 </Grid>

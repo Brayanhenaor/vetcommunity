@@ -6,6 +6,7 @@
     {
         public string UrlPhoto { get; set; }
         public string AboutMe { get; set; }
+        public string FullName { get; set; }
 
         public ICollection<Post> Posts { get; set; }
         public ICollection<PostPinned> PostPinneds { get; set; }

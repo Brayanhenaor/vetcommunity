@@ -11,6 +11,8 @@
 
         public int CommentsCount { get; set; }
 
+        public UserResponse User { get; set; }
+
         public ICollection<CategoryResponse> Categories { get; set; }
     }
 }

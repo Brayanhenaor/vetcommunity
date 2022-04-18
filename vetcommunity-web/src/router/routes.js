@@ -1,5 +1,6 @@
 export const route = {
     home: '/',
     myQuestions:'/myquestions',
-    profile:'/profile'
+    profile:'/profile',
+    login:'/login',
 }

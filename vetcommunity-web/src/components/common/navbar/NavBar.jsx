@@ -7,13 +7,14 @@ import IconButton from '@mui/material/IconButton';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBars, faBell, faClipboardQuestion, faHouse, faMagnifyingGlass, faUser } from '@fortawesome/free-solid-svg-icons';
 import { color } from '../../../utils/color';
-import { Avatar, Badge, BottomNavigation, BottomNavigationAction, InputBase, Paper, styled, TextField } from '@mui/material';
+import { Avatar, Badge, BottomNavigation, BottomNavigationAction, colors, InputBase, Paper, styled, TextField } from '@mui/material';
 import './nav.css';
 import { route } from '../../../router/routes';
 import { NavLink } from './NavLink';
 import { Notifications } from './Notifications';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 const Li = styled('li')({
     textDecoration: 'none',
@@ -69,6 +70,8 @@ export const Navbar = () => {
     const [value, setValue] = useState(0);
     const navigate = useNavigate();
 
+    const { isLogued } = useSelector(state => state.auth);
+
     return (
         <>
             <Box sx={{ flexGrow: 1 }}>
@@ -121,9 +124,19 @@ export const Navbar = () => {
                                 <StyledInputBase placeholder='Buscar...' />
                             </div>
 
-                            <Avatar alt="Brayan" src="https://caricom.org/wp-content/uploads/Floyd-Morris-Remake-1024x879-1.jpg" />
+                            {
+                                isLogued ? (
+                                    <>
+                                        <Avatar alt="Brayan" src="https://caricom.org/wp-content/uploads/Floyd-Morris-Remake-1024x879-1.jpg" />
+                                        <Notifications />
+                                    </>
 
-                            <Notifications />
+                                ) : (
+                                    <>
+                                    <Button style={{color:color.gray}} size="small" onClick={()=>navigate(route.login)}>Iniciar sesion</Button>
+                                    </>
+                                )
+                            }
                         </div>
 
                     </Toolbar>

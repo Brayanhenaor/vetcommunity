@@ -66,6 +66,8 @@
                 UserName = "admin@admin.com",
                 NormalizedUserName = "ADMIN@ADMIN.COM",
                 PasswordHash = hasher.HashPassword(null, "591236bh!"),
+                FullName = "User Admin",
+                UrlPhoto = "https://cdn.now.howstuffworks.com/media-content/0b7f4e9b-f59c-4024-9f06-b3dc12850ab7-1920-1080.jpg"
             });
 
             builder.Entity<IdentityUserRole<string>>().HasData(

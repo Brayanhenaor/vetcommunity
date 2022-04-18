@@ -8,10 +8,12 @@ import { store } from './store/store';
 import { AppRouter } from './router/AppRouter';
 import { CssBaseline } from '@mui/material';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
+import axios from 'axios';
+axios.defaults.baseURL = process.env.REACT_APP_API_BASE_URL;
 
 ReactDOM.render(
   <React.StrictMode>
-    <CssBaseline/>
+    <CssBaseline />
     <Provider store={store}>
       <BrowserRouter>
         <AppRouter />
