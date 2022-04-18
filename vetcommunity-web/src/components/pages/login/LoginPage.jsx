@@ -40,7 +40,7 @@ export const LoginPage = () => {
           <Grid container alignItems={'center'} sx={{ bgcolor: color.lightSecondary, minHeight: '100vh' }} justifyContent={'center'}>
             <Card sx={{ width: '80%', borderRadius: '20px', maxWidth: '95%' }}>
               <Grid container>
-                <Grid container justifyContent={'center'} alignItems='center' sx={{ padding: 5 }} item md={6}>
+                <Grid container justifyContent={'center'} alignItems='center' sx={{ padding: 5 }} item md={5}>
                   <Grid container>
                     <Grid item xs={12} sx={{ mb: 4 }}>
                       <Typography variant='h3' sx={{ fontWeight: 'bold' }}>Hola✌️</Typography>
@@ -72,7 +72,7 @@ export const LoginPage = () => {
                     </Grid>
                   </Grid>
                 </Grid>
-                <Grid container item md={6} sx={{ display: { xs: 'none', md: 'flex' } }}>
+                <Grid container item md={7} sx={{ display: { xs: 'none', md: 'flex' } }}>
                   <img src={pets} alt="pets" style={{ objectFit: 'cover', maxHeight: '80vh' }} />
                 </Grid>
               </Grid>
