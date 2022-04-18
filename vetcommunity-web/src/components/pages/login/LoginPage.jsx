@@ -1,6 +1,7 @@
 import { Card, CardContent, Container, Grid, Typography } from '@mui/material'
 import { Box } from '@mui/system'
 import React from 'react'
+import { useLoading } from '../../../hooks/useLoading'
 import pets from '../../../img/pets.webp'
 import { color } from '../../../utils/color'
 import { Button } from '../../common/button/Button'
@@ -8,6 +9,14 @@ import { OutlinedButton } from '../../common/button/OutlinedButton'
 import { Input } from '../../common/input/Input'
 
 export const LoginPage = () => {
+
+  const setLoading = useLoading();
+
+  const handleLogin = () => {
+    setLoading(true);
+  }
+
+
   return (
     <Box sx={{ bgcolor: color.lightSecondary, minHeight: '100vh' }}>
       <Grid container alignItems={'center'} sx={{ bgcolor: color.lightSecondary, minHeight: '100vh' }} justifyContent={'center'}>
@@ -31,7 +40,7 @@ export const LoginPage = () => {
                 </Grid>
 
                 <Grid item xs={12}>
-                  <Button>Iniciar sesión</Button>
+                  <Button onClick={handleLogin}>Iniciar sesión</Button>
                 </Grid>
 
                 <Grid item xs={12}>
@@ -39,7 +48,7 @@ export const LoginPage = () => {
                 </Grid>
 
                 <Grid container justifyContent={'center'} item xs={12}>
-                  <span style={{marginTop:'15px',cursor:'pointer', color:color.secondary}}>¿Olvidaste tu contraseña?</span>
+                  <span style={{ marginTop: '15px', cursor: 'pointer', color: color.secondary }}>¿Olvidaste tu contraseña?</span>
                 </Grid>
               </Grid>
             </Grid>

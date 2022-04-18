@@ -67,7 +67,7 @@ const menu = [
 ]
 
 export const Navbar = () => {
-    const [value, setValue] = useState(0);
+    const [value, setValue] = useState(route.home);
     const navigate = useNavigate();
 
     const { isLogued } = useSelector(state => state.auth);
@@ -78,13 +78,11 @@ export const Navbar = () => {
                 <AppBar position="static" elevation={0}>
                     <Toolbar sx={{ bgcolor: 'white', display: 'flex', justifyContent: 'space-between' }} >
 
-
                         <IconButton
                             size="large"
                             edge="start"
                             color="inherit"
                             aria-label="menu"
-                            sx={{ mr: 2 }}
                         >
                             <FontAwesomeIcon icon={faBars} beat color={color.secondary} />
                         </IconButton>
@@ -133,7 +131,7 @@ export const Navbar = () => {
 
                                 ) : (
                                     <>
-                                    <Button style={{color:color.gray}} size="small" onClick={()=>navigate(route.login)}>Iniciar sesion</Button>
+                                        <Button style={{ color: color.gray }} size="small" onClick={() => navigate(route.login)}>Iniciar sesion</Button>
                                     </>
                                 )
                             }
@@ -150,9 +148,9 @@ export const Navbar = () => {
                         navigate(newValue);
                     }}
                 >
-                    <BottomNavigationAction value={route.home} label="Inicio" icon={<FontAwesomeIcon icon={faHouse} size='lg' />} />
-                    <BottomNavigationAction value={route.myQuestions} label="Mis preguntas" icon={<FontAwesomeIcon icon={faClipboardQuestion} size='lg' />} />
-                    <BottomNavigationAction value={route.profile} label="Perfil" icon={<FontAwesomeIcon icon={faUser} size='lg' />} />
+                    <BottomNavigationAction style={{ color: color.secondary }} value={route.home} label="Inicio" icon={<FontAwesomeIcon icon={faHouse} size='lg' />} />
+                    <BottomNavigationAction style={{ color: color.secondary }} value={route.myQuestions} label="Mis preguntas" icon={<FontAwesomeIcon icon={faClipboardQuestion} size='lg' />} />
+                    <BottomNavigationAction style={{ color: color.secondary }} value={route.profile} label="Perfil" icon={<FontAwesomeIcon icon={faUser} size='lg' />} />
                 </BottomNavigation>
             </Paper>
         </>
