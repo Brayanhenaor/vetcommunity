@@ -3,10 +3,19 @@ import { type } from "../utils/types";
 const initAuthReducer = {
     isLogued: false,
     token: '',
-    expiration:null
+    expiration: null,
+    roles: []
 }
 
-export const authReducer = (state = initAuthReducer, action) => {
+const initializeAuth = () => {
+    const user = localStorage.getItem('VETUSER');
+    if (user !== null)
+        return JSON.parse(user)
+
+    return initAuthReducer;
+}
+
+export const authReducer = (state = initializeAuth(), action) => {
     switch (action.type) {
         case type.login:
             return {

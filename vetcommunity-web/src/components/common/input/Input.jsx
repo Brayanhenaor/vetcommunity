@@ -1,11 +1,12 @@
 import { Input as MInput, TextField } from '@mui/material'
 import { styled } from '@mui/system'
 import React from 'react'
+import { useFormContext } from 'react-hook-form';
 import { color } from '../../../utils/color';
 
 const StyledInput = styled(TextField)({
-    width:'100%',
-    marginTop:'10px',
+    width: '100%',
+    marginTop: '14px',
     '& label.Mui-focused': {
         color: color.secondary,
     },
@@ -22,8 +23,13 @@ const StyledInput = styled(TextField)({
     },
 });
 
-export const Input = ({ variant = "outlined", ...props }) => {
+export const Input = ({ variant = "outlined", name, validations, ...props }) => {
+    const { register } = useFormContext();
+
     return (
-        <StyledInput variant={variant} {...props}/>
+        <StyledInput
+            {...register(name, validations)}
+            variant={variant}
+            {...props} />
     )
 }

@@ -41,15 +41,11 @@ const StyledTab = styled((props) => <Tab disableRipple {...props} />)(
 
 export const HomePage = () => {
     const { data, loading } = useFetch(endpoints.allPosts);
-    useEffect(() => {
-        console.log(data?.result)
-    }, [data])
-
+   
     const [value, setValue] = React.useState(0);
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
-        console.log(newValue);
     };
 
 

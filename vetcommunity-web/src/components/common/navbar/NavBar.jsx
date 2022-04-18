@@ -15,6 +15,7 @@ import { Notifications } from './Notifications';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import { UserMenu } from './UserMenu';
 
 const Li = styled('li')({
     textDecoration: 'none',
@@ -125,7 +126,7 @@ export const Navbar = () => {
                             {
                                 isLogued ? (
                                     <>
-                                        <Avatar alt="Brayan" src="https://caricom.org/wp-content/uploads/Floyd-Morris-Remake-1024x879-1.jpg" />
+                                    <UserMenu/>
                                         <Notifications />
                                     </>
 

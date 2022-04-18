@@ -1,7 +1,12 @@
 import { type } from "../utils/types";
 
 const initUiReducer = {
-    loading: false
+    loading: false,
+    snackbar: {
+        open: false,
+        message: '',
+        severity: 'success'
+    }
 }
 
 export const uiReducer = (state = initUiReducer, action) => {
@@ -14,6 +19,24 @@ export const uiReducer = (state = initUiReducer, action) => {
         case type.stopLoading:
             return {
                 loading: false
+            }
+
+        case type.showSnack:
+            return {
+                ...state,
+                snackbar: {
+                    open: true,
+                    ...action.payload
+                }
+            }
+
+        case type.hideSnack:
+            return {
+                ...state,
+                snackbar: {
+                    ...state.snackbar,
+                    open: false
+                }
             }
 
         default:
