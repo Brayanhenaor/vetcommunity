@@ -58,6 +58,15 @@ namespace vetcommunity.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Se realizo el comentario correctamente.
+        /// </summary>
+        internal static string CommentCreated {
+            get {
+                return ResourceManager.GetString("CommentCreated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Se publicó el post exitosamente.
         /// </summary>
         internal static string PostPublished {

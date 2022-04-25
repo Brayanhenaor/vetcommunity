@@ -1,4 +1,6 @@
-﻿namespace vetcommunity.Data.Entities
+﻿using Newtonsoft.Json;
+
+namespace vetcommunity.Data.Entities
 {
 	public class PostComment
 	{
@@ -11,6 +13,9 @@
         public string UserId { get; set; }
 
         public string Comment { get; set; }
+
+        [JsonIgnore]
+        public DateTime Date { get; set; } = DateTime.Now;
 
         public ICollection<CommentLike> CommentLikes { get; set; }
     }

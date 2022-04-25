@@ -1,11 +1,16 @@
 import { CircularProgress } from '@mui/material'
 import { Box } from '@mui/system'
 import React from 'react'
+import { color } from '../../../utils/color'
 
-export const Spinner = () => {
+export const Spinner = ({ loading }) => {
     return (
-        <Box sx={{display:'flex', justifyContent:'center'}}>
-            <CircularProgress />
-        </Box>
+        <>
+            {loading && (
+                <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                    <CircularProgress sx={{ color: color.secondary }} />
+                </Box>
+            )}
+        </>
     )
 }

@@ -4,7 +4,7 @@ import React from 'react'
 import { useFormContext } from 'react-hook-form';
 import { color } from '../../../utils/color';
 
-const StyledInput = styled(TextField)({
+const StyledInput = styled(TextField)(({ style }) => ({
     width: '100%',
     marginTop: '14px',
     '& label.Mui-focused': {
@@ -21,9 +21,10 @@ const StyledInput = styled(TextField)({
             borderColor: color.lightSecondary,
         },
     },
-});
+    ...style
+}));
 
-export const Input = ({ variant = "outlined", name, validations, ...props }) => {
+export const Input = ({ ref, variant = "outlined", name, validations, ...props }) => {
     const { register } = useFormContext();
 
     return (

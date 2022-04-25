@@ -12,12 +12,13 @@ import { type } from "../utils/types";
 import { hideSnack } from "../actions/ui";
 import { useEffect } from "react";
 import { RegisterPage } from "../components/pages/register/RegisterPage";
+import axios from "axios";
 
 export const AppRouter = () => {
     console.log('Ambiente', process.env.REACT_APP_API_BASE_URL);
 
     const { ui: { loading, snackbar }, auth } = useSelector(state => state);
-    const { isLogued } = auth;
+    const { isLogued,token } = auth;
     const dispatch = useDispatch();
 
     const handleCloseSnack = () => {
@@ -27,6 +28,7 @@ export const AppRouter = () => {
     useEffect(() => {
         if (isLogued) {
             localStorage.setItem('VETUSER', JSON.stringify(auth));
+            axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
             return;
         }
 

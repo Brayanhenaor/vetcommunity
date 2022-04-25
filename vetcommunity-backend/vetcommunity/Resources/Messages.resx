@@ -18,4 +18,7 @@
 	<data name="PostPublished" xml:space="preserve">
 		<value>Se publicó el post exitosamente</value>
 	</data>
+	<data name="CommentCreated" xml:space="preserve">
+		<value>Se realizo el comentario correctamente</value>
+	</data>
 </root>

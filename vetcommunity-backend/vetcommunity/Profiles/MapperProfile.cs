@@ -14,6 +14,9 @@
             CreateMap<Category, CategoryResponse>();
             CreateMap<User, UserResponse>();
             CreateMap<Post, PostResponse>().ForMember(pr=> pr.CommentsCount, p=> p.MapFrom(p=> p.PostComments.Count));
+            CreateMap<CommentRequest, PostComment>();
+            CreateMap<PostComment, CommentResponse>();
+            CreateMap<CommentLike, PostCommentLikeResponse>();
         }
     }
 }

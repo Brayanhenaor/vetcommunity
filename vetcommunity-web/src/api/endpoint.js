@@ -1,4 +1,5 @@
 export const endpoints = {
-    allPosts: '/Post/All',
+    allPosts: '/Posts/All',
     login: '/User/Login',
+    comments: '/Comments',
 }

@@ -6,6 +6,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import { route } from '../../../router/routes';
 import { useDispatch } from 'react-redux';
 import { logout } from '../../../actions/auth';
+import shortid from 'shortid';
 
 const Option = styled('span')({
     color: '#000000',
@@ -70,7 +71,7 @@ export const UserMenu = () => {
             >
                 {
                     menu?.map(({ title, icon: Icon }) => (
-                        <MenuItem onClick={handleOptionSelected}>
+                        <MenuItem key={shortid.generate()} onClick={handleOptionSelected}>
                             <ListItemIcon>
                                 <Icon fontSize="small" />
                             </ListItemIcon>

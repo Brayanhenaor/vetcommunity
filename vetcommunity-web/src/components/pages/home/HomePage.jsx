@@ -2,11 +2,13 @@ import styled from '@emotion/styled';
 import { Container, Tab, Tabs } from '@mui/material'
 import { Box } from '@mui/system';
 import React, { useEffect } from 'react'
+import { useSelector } from 'react-redux';
 import { endpoints } from '../../../api/endpoint';
 import { useFetch } from '../../../hooks/useFetch';
 import { color } from '../../../utils/color';
 import { Spinner } from '../../common/loader/Spinner';
 import { PostList } from '../../common/post/PostList';
+import { CreateQuestion } from './CreateQuestion';
 
 const StyledTabs = styled((props) => (
     <Tabs
@@ -33,7 +35,7 @@ const StyledTab = styled((props) => <Tab disableRipple {...props} />)(
         color: color.lightSecondary,
         '&.Mui-selected': {
             color: color.secondary,
-            fontWeight:'bold'
+            fontWeight: 'bold'
         },
     }
 );
@@ -41,7 +43,8 @@ const StyledTab = styled((props) => <Tab disableRipple {...props} />)(
 
 export const HomePage = () => {
     const { data, loading } = useFetch(endpoints.allPosts);
-   
+    const { isLogued } = useSelector(state => state.auth);
+
     const [value, setValue] = React.useState(0);
 
     const handleChange = (event, newValue) => {
@@ -51,7 +54,12 @@ export const HomePage = () => {
 
     return (
         <Container>
-            <Box sx={{display:'flex', justifyContent:'center'}}>
+            {
+                isLogued && (
+                    <CreateQuestion />
+                )
+            }
+            <Box sx={{ display: 'flex', justifyContent: 'center' }}>
                 <StyledTabs
                     value={value}
                     onChange={handleChange}

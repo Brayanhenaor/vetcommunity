@@ -16,13 +16,13 @@
     [ApiController]
     [Authorize]
     [Route("api/[controller]")]
-    public class PostController : ControllerBase
+    public class PostsController : ControllerBase
     {
         private readonly UserManager<User> userManager;
         private readonly DataContext dataContext;
         private readonly IMapper mapper;
 
-        public PostController(UserManager<User> userManager, DataContext dataContext, IMapper mapper)
+        public PostsController(UserManager<User> userManager, DataContext dataContext, IMapper mapper)
         {
             this.userManager = userManager;
             this.dataContext = dataContext;
