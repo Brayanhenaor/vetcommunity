@@ -141,7 +141,7 @@ export const Navbar = () => {
                     </Toolbar>
                 </AppBar>
             </Box>
-            <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0, display: { md: 'none' } }} elevation={3}>
+            <Paper sx={{ position: 'fixed', bottom: 0, zIndex:999, left: 0, right: 0, display: { md: 'none' } }} elevation={3}>
                 <BottomNavigation
                     value={value}
                     onChange={(event, newValue) => {

@@ -1,12 +1,10 @@
-import { Avatar, Card, Grid } from '@mui/material'
+import { Avatar, Card } from '@mui/material'
 import { Box } from '@mui/system'
 import React, { useRef, useState } from 'react'
 import { Button } from '../../common/button/Button'
 import SendIcon from '@mui/icons-material/Send';
-import { Input } from '../../common/input/Input';
 import { FormProvider, useForm } from 'react-hook-form';
 import { OutlinedButton } from '../../common/button/OutlinedButton';
-import { useSelector } from 'react-redux';
 import { BasicInput } from '../../common/input/BasicInput';
 
 export const CreateQuestion = () => {

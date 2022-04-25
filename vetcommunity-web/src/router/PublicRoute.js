@@ -3,6 +3,8 @@ import { Navigate } from 'react-router-dom'
 import PropTypes from 'prop-types';
 import { Navbar } from '../components/common/navbar/NavBar';
 import { route } from './routes';
+import { Box } from '@mui/material';
+
 
 export const PublicRoute = ({ isLogued, restricted, navBar = true, footer = true, component: Component }) => {
   return (
@@ -16,11 +18,10 @@ export const PublicRoute = ({ isLogued, restricted, navBar = true, footer = true
           )
         }
 
-        <main>
-
+        <Box component='main' sx={{ mb: {xs:8, md: 0 } }}>
           <Component />
-        </main>
-        
+        </Box>
+
       </div>
   )
 };
