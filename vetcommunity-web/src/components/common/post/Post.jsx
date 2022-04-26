@@ -14,6 +14,8 @@ import { Spinner } from '../loader/Spinner';
 import { getAsync } from '../../../api/apiService';
 import { endpoints } from '../../../api/endpoint';
 import shortid from 'shortid';
+import ThumbUpIcon from '@mui/icons-material/ThumbUp';
+import ThumbDownIcon from '@mui/icons-material/ThumbDown';
 
 const Name = styled('h5')({
     margin: 0,
@@ -98,6 +100,7 @@ export const Post = ({ post: { id, title, message, ranking, date, commentsCount,
 
         if (comments.length > 0) {
             setComments([]);
+            setHasMoreComments(false);
             return;
         }
 
@@ -217,7 +220,25 @@ export const Post = ({ post: { id, title, message, ranking, date, commentsCount,
                                                     {comment.comment}
                                                 </span>
                                             </Box>
-                                            <Grid item xs={12}>
+                                            <Grid container item alignItems={'center'} sx={{ mt: 1 }} gap={1} xs={12}>
+                                                <Box
+                                                    sx={{
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        p: 1,
+                                                        gap: 1,
+                                                        borderRadius: 10,
+                                                        bgcolor: color.lightGray2
+                                                    }}>
+                                                    <ThumbUpIcon sx={{ fontSize: 17, color: color.lightSecondary }} />
+                                                    <span style={{ fontSize: 13, display: 'block' }}>
+                                                        {comment.commentLikes.filter(like => like.recommended).length}
+                                                    </span>
+                                                    <ThumbDownIcon sx={{ fontSize: 17, color: color.red }} />
+                                                    <span style={{ fontSize: 13, display: 'block' }}>
+                                                        {comment.commentLikes.filter(like => !like.recommended).length}
+                                                    </span>
+                                                </Box>
                                                 <span style={{ fontSize: 12, display: 'block' }}>
                                                     {moment(comment.date).fromNow()}
                                                 </span>
