@@ -11,11 +11,11 @@ import { BasicInput } from '../input/BasicInput';
 import SendIcon from '@mui/icons-material/Send';
 import { FormProvider, useForm } from 'react-hook-form';
 import { Spinner } from '../loader/Spinner';
-import { getAsync } from '../../../api/apiService';
+import { getAsync, postAsync } from '../../../api/apiService';
 import { endpoints } from '../../../api/endpoint';
 import shortid from 'shortid';
-import ThumbUpIcon from '@mui/icons-material/ThumbUp';
-import ThumbDownIcon from '@mui/icons-material/ThumbDown';
+import { capitalize } from 'lodash'
+import { Comment } from './Comment';
 
 const Name = styled('h5')({
     margin: 0,
@@ -74,7 +74,7 @@ const SquareInfo = ({ icon: Icon, text }) => {
     )
 }
 
-export const Post = ({ post: { id, title, message, ranking, date, commentsCount, user } }) => {
+export const Post = ({ post: { id, title, message, ranking, date, commentsCount, user }, isLogued }) => {
     moment.locale('es');
     const methods = useForm();
 
@@ -82,6 +82,7 @@ export const Post = ({ post: { id, title, message, ranking, date, commentsCount,
     const [comments, setComments] = useState([]);
     const [hasMoreComments, setHasMoreComments] = useState(false);
     const [page, setPage] = useState(1);
+    const [seeComments, setSeeComments] = useState(false);
 
     const getComments = async (page) => {
         setLoadingComments(true);
@@ -106,16 +107,30 @@ export const Post = ({ post: { id, title, message, ranking, date, commentsCount,
 
         const response = await getComments(1);
 
-        if (response.success)
-            setComments(response.result);
+        if (response.success) { }
+        setComments(response.result);
+
+        setSeeComments(!seeComments);
     }
 
     const handleGetMoreComments = async () => {
         const response = await getComments(page + 1);
 
+        console.log(response)
+
         if (response.success) {
             setPage(page + 1);
             setComments([...response.result, ...comments]);
+        }
+    }
+
+    const handleAddComment = async (data) => {
+        console.log(data)
+        const response = await postAsync(endpoints.comments, { ...data, postId: id });
+
+        console.log(response);
+        if (response.success) {
+            setComments([response.result, ...comments]);
         }
     }
 
@@ -135,7 +150,7 @@ export const Post = ({ post: { id, title, message, ranking, date, commentsCount,
                     <Grid item xs={12} alignItems="flex-start">
                         <div>
                             <Name>{user.fullName}</Name>
-                            <Date>{moment(date).fromNow()}</Date>
+                            <Date>{capitalize(moment(date).fromNow())}</Date>
                         </div>
                     </Grid>
                     <Grid item xs={12}>
@@ -150,33 +165,42 @@ export const Post = ({ post: { id, title, message, ranking, date, commentsCount,
                     </Grid>
 
                     <FormProvider {...methods}>
-                        <Grid container item xs={12} alignItems='center' sx={{ p: 1 }}>
-                            <Grid item onClick={handleGetComments}>
-                                <SquareInfo text={`${commentsCount}`} icon={<FontAwesomeIcon color={color.secondary} icon={faComment} />} />
+                        <form style={{ width: '100%' }} onSubmit={methods.handleSubmit(handleAddComment)}>
+                            <Grid container item xs={12} alignItems='center' sx={{ p: 1 }}>
+                                <Grid item onClick={handleGetComments}>
+                                    <SquareInfo text={`${commentsCount}`} icon={<FontAwesomeIcon color={color.secondary} icon={faComment} />} />
+                                </Grid>
+                                {
+                                    (isLogued && seeComments) && (
+                                        <Grid item container sx={{ gap: '10px', flexWrap: 'nowrap', marginTop: 2 }} justifyContent='center' alignItems='center' xs={12}>
+                                            <Avatar alt="Brayan" src={user.urlPhoto} />
+                                            <BasicInput
+                                                name="comment"
+                                                multiline
+                                                maxRows={3}
+                                                placeholder="Añadir comentario" />
+                                            <button
+                                                type="submit"
+                                                style={{
+                                                    cursor: 'pointer',
+                                                    height: 45,
+                                                    width: 45,
+                                                    borderRadius: '50%',
+                                                    display: 'flex',
+                                                    justifyContent: 'center',
+                                                    alignItems: 'center',
+                                                    flexShrink: 0,
+                                                    border: 0,
+                                                    backgroundColor: color.secondary
+                                                }}>
+                                                <SendIcon
+                                                    sx={{ color: color.primary }} />
+                                            </button>
+                                        </Grid>
+                                    )
+                                }
                             </Grid>
-                            <Grid item container sx={{ gap: '10px', flexWrap: 'nowrap', marginTop: 2 }} justifyContent='center' alignItems='center' xs={12}>
-                                <Avatar alt="Brayan" src={user.urlPhoto} />
-                                <BasicInput
-                                    name="comment"
-                                    multiline
-                                    maxRows={3}
-                                    placeholder="Añadir comentario" />
-                                <Box sx={{
-                                    cursor: 'pointer',
-                                    height: 45,
-                                    width: 45,
-                                    borderRadius: '50%',
-                                    display: 'flex',
-                                    justifyContent: 'center',
-                                    alignItems: 'center',
-                                    flexShrink: 0,
-                                    bgcolor: color.secondary
-                                }}>
-                                    <SendIcon
-                                        sx={{ color: color.primary }} />
-                                </Box>
-                            </Grid>
-                        </Grid>
+                        </form>
                     </FormProvider>
 
                     <Grid container item xs={12}>
@@ -199,52 +223,7 @@ export const Post = ({ post: { id, title, message, ranking, date, commentsCount,
                         {
                             comments?.length > 0 && (
                                 comments.map(comment => (
-                                    <Grid key={shortid.generate()} item container sx={{ gap: '10px', flexWrap: 'nowrap', marginTop: 2 }} alignItems='flex-start' xs={12}>
-                                        <Avatar alt="Brayan" src={comment.user.urlPhoto} />
-
-                                        <Grid item container>
-
-                                            <Box sx={{
-                                                cursor: 'pointer',
-                                                borderRadius: '15px',
-                                                flexWrap: 'wrap',
-                                                p: 1.5,
-                                                alignItems: 'center',
-                                                flexShrink: 0,
-                                                bgcolor: color.lightGray2
-                                            }}>
-                                                <span style={{ fontSize: 13, fontWeight: 'bold' }}>
-                                                    {comment.user.fullName}
-                                                </span>
-                                                <span style={{ fontSize: 16, display: 'block' }}>
-                                                    {comment.comment}
-                                                </span>
-                                            </Box>
-                                            <Grid container item alignItems={'center'} sx={{ mt: 1 }} gap={1} xs={12}>
-                                                <Box
-                                                    sx={{
-                                                        display: 'flex',
-                                                        alignItems: 'center',
-                                                        p: 1,
-                                                        gap: 1,
-                                                        borderRadius: 10,
-                                                        bgcolor: color.lightGray2
-                                                    }}>
-                                                    <ThumbUpIcon sx={{ fontSize: 17, color: color.lightSecondary }} />
-                                                    <span style={{ fontSize: 13, display: 'block' }}>
-                                                        {comment.commentLikes.filter(like => like.recommended).length}
-                                                    </span>
-                                                    <ThumbDownIcon sx={{ fontSize: 17, color: color.red }} />
-                                                    <span style={{ fontSize: 13, display: 'block' }}>
-                                                        {comment.commentLikes.filter(like => !like.recommended).length}
-                                                    </span>
-                                                </Box>
-                                                <span style={{ fontSize: 12, display: 'block' }}>
-                                                    {moment(comment.date).fromNow()}
-                                                </span>
-                                            </Grid>
-                                        </Grid>
-                                    </Grid>
+                                    <Comment key={shortid.generate()} comment={comment} />
                                 ))
                             )
                         }

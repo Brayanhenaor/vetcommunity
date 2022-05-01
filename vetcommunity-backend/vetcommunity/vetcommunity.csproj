@@ -20,6 +20,7 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.4" />
+    <PackageReference Include="System.Linq.Dynamic.Core" Version="1.2.18" />
   </ItemGroup>
 
   <ItemGroup>
@@ -40,6 +41,7 @@
     <None Remove="Microsoft.AspNetCore.Mvc.NewtonsoftJson" />
     <None Remove="Profiles\" />
     <None Remove="Extensions\" />
+    <None Remove="System.Linq.Dynamic.Core" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Data\" />

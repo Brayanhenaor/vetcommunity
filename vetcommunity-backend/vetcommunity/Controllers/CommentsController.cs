@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Dynamic;
 using vetcommunity.Data;
 using vetcommunity.Data.Entities;
 using vetcommunity.DTOs.Request;
@@ -49,27 +50,21 @@ namespace vetcommunity.Controllers
             await dataContext.PostComments.AddAsync(comment);
             await dataContext.SaveChangesAsync();
 
-            return Created(string.Empty, new Response
+            return Created(string.Empty, new Response<CommentResponse>
             {
-                Message = Messages.CommentCreated
+                Message = Messages.CommentCreated,
+                Result = mapper.Map<CommentResponse>(comment)
             });
         }
 
+        [AllowAnonymous]
         [HttpGet()]
         public async Task<ActionResult<PagingResponse<ICollection<CommentResponse>>>> GetCommentsAsync([FromQuery] PostCommentRequest postCommentRequest)
         {
-            string userToken = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name).Value;
-
-            User user = await userManager.FindByNameAsync(userToken);
-
-            if (user == null)
-                return BadRequest(new Response
-                {
-                    Success = false
-                });
-
             (int totalRecords, int page, int totalPages, ICollection<PostComment> results) result =
                 await dataContext.PostComments.Where(pc => pc.PostId == postCommentRequest.IdPost)
+                .OrderByDescending(pc => pc.Date)
+                .Include(pc => pc.User)
                 .Include(pc => pc.CommentLikes)
                 .ThenInclude(cl => cl.User)
                 .PagingAsync(postCommentRequest);

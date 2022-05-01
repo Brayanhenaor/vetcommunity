@@ -79,16 +79,8 @@ export const Navbar = () => {
                 <AppBar position="static" elevation={0}>
                     <Toolbar sx={{ bgcolor: 'white', display: 'flex', justifyContent: 'space-between' }} >
 
-                        <IconButton
-                            size="large"
-                            edge="start"
-                            color="inherit"
-                            aria-label="menu"
-                        >
-                            <FontAwesomeIcon icon={faBars} beat color={color.secondary} />
-                        </IconButton>
 
-
+                        <div></div>
                         <Ul
                             sx={{
                                 display: { xs: 'none', md: 'flex' }

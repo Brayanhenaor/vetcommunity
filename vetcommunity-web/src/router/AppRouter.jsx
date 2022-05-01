@@ -15,8 +15,6 @@ import { RegisterPage } from "../components/pages/register/RegisterPage";
 import axios from "axios";
 
 export const AppRouter = () => {
-    console.log('Ambiente', process.env.REACT_APP_API_BASE_URL);
-
     const { ui: { loading, snackbar }, auth } = useSelector(state => state);
     const { isLogued,token } = auth;
     const dispatch = useDispatch();

@@ -42,15 +42,14 @@ const StyledTab = styled((props) => <Tab disableRipple {...props} />)(
 
 
 export const HomePage = () => {
-    const { data, loading } = useFetch(endpoints.allPosts);
     const { isLogued } = useSelector(state => state.auth);
 
     const [value, setValue] = React.useState(0);
+    const { data, loading } = useFetch(`${endpoints.allPosts}?OrderBy=${value}`);
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
-
 
     return (
         <Container>
@@ -69,13 +68,8 @@ export const HomePage = () => {
                     <StyledTab label="Más respondidas" />
                 </StyledTabs>
             </Box>
-            {
-                loading ? (
-                    <Spinner />
-                ) : (
-                    <PostList posts={data?.result} />
-                )
-            }
+            <Spinner loading={loading} />
+            <PostList posts={data?.result} />
         </Container>
     )
 }

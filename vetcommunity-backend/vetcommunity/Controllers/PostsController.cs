@@ -2,16 +2,16 @@
 {
     using System.Security.Claims;
     using AutoMapper;
-    using Microsoft.AspNetCore.Authorization;
-    using Microsoft.AspNetCore.Identity;
+    using System.Linq.Dynamic.Core;
     using Microsoft.AspNetCore.Mvc;
-    using Microsoft.EntityFrameworkCore;
     using vetcommunity.Data;
     using vetcommunity.Data.Entities;
     using vetcommunity.DTOs.Request;
     using vetcommunity.DTOs.Response;
     using vetcommunity.Extensions;
     using vetcommunity.Resources;
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Identity;
 
     [ApiController]
     [Authorize]
@@ -92,8 +92,9 @@
 
         [AllowAnonymous]
         [HttpGet("All")]
-        public async Task<ActionResult<PagingResponse<ICollection<PostResponse>>>> GetPostsAsync([FromQuery] PagingRequest pagingRequest)
+        public async Task<ActionResult<PagingResponse<ICollection<PostResponse>>>> GetPostsAsync([FromQuery] PostsRequest pagingRequest)
         {
+            List<PagingRequest> d = new List<PagingRequest>();
             (int totalRecords, int page, int totalPages, ICollection<PostResponse> results) result = await dataContext.Posts
                 .Select(post => new PostResponse
                 {
@@ -106,7 +107,9 @@
                     User = mapper.Map<UserResponse>(post.User),
                     Categories = mapper.Map<ICollection<CategoryResponse>>(post.Categories),
                     Date = post.Date
-                }).PagingAsync(pagingRequest);
+                })
+                .OrderBy($"{pagingRequest.OrderBy} DESC")
+                .PagingAsync(pagingRequest);
 
 
             return new PagingResponse<ICollection<PostResponse>>
