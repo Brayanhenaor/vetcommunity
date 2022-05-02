@@ -3,6 +3,7 @@
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore;
+    using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
     using vetcommunity.Data.Entities;
     using vetcommunity.Enums;
 
@@ -22,6 +23,29 @@
 
             builder.Entity<CommentLike>().HasKey(cl => new { cl.UserId, cl.PostCommentId });
 
+            var dateTimeConverter = new ValueConverter<DateTime, DateTime>(
+            v => v.ToUniversalTime(),
+            v => DateTime.SpecifyKind(v, DateTimeKind.Utc));
+
+            var nullableDateTimeConverter = new ValueConverter<DateTime?, DateTime?>(
+                v => v.HasValue ? v.Value.ToUniversalTime() : v,
+                v => v.HasValue ? DateTime.SpecifyKind(v.Value, DateTimeKind.Utc) : v);
+
+            foreach (var entityType in builder.Model.GetEntityTypes())
+            {
+                foreach (var property in entityType.GetProperties())
+                {
+                    if (property.ClrType == typeof(DateTime))
+                    {
+                        property.SetValueConverter(dateTimeConverter);
+                    }
+                    else if (property.ClrType == typeof(DateTime?))
+                    {
+                        property.SetValueConverter(nullableDateTimeConverter);
+                    }
+                }
+            }
+
             string adminId = Guid.NewGuid().ToString();
             string normalId = Guid.NewGuid().ToString();
             string vetId = Guid.NewGuid().ToString();
@@ -30,6 +54,7 @@
 
             SeedRoles(builder, adminId, normalId, vetId);
             SeedAdminUser(builder, userId, adminId);
+            SeedCategories(builder);
 
             base.OnModelCreating(builder);
         }
@@ -53,6 +78,43 @@
                 Name = UserRole.Vet.ToString(),
                 NormalizedName = UserRole.Vet.ToString().ToUpper()
               },
+            });
+        }
+
+        public void SeedCategories(ModelBuilder builder)
+        {
+            builder.Entity<Category>().HasData(new List<Category>
+            {
+                new Category
+                {
+                    Id = 1,
+                    Name = "Alimentación"
+                },
+                new Category
+                {
+                    Id = 2,
+                    Name = "Salud"
+                },
+                new Category
+                {
+                    Id = 3,
+                    Name = "Higiene"
+                },
+                new Category
+                {
+                    Id = 4,
+                    Name = "Vacunación"
+                },
+                new Category
+                {
+                    Id = 5,
+                    Name = "Cuidados"
+                },
+                new Category
+                {
+                    Id = 6,
+                    Name = "Veterinaria"
+                },
             });
         }
 

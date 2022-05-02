@@ -16,6 +16,9 @@ import { endpoints } from '../../../api/endpoint';
 import shortid from 'shortid';
 import { capitalize } from 'lodash'
 import { Comment } from './Comment';
+import { showSnack } from '../../../actions/ui';
+import { useIsMounted } from '../../../hooks/useIsMounted';
+import { useDispatch } from 'react-redux';
 
 const Name = styled('h5')({
     margin: 0,
@@ -74,9 +77,12 @@ const SquareInfo = ({ icon: Icon, text }) => {
     )
 }
 
-export const Post = ({ post: { id, title, message, ranking, date, commentsCount, user }, isLogued }) => {
+export const Post = ({ post: { id, title, message, ranking, date, commentsCount, user }, isLogued, userId }) => {
     moment.locale('es');
     const methods = useForm();
+    const {reset} = methods;
+    const isMounted = useIsMounted();
+    const dispatch = useDispatch();
 
     const [loadingComments, setLoadingComments] = useState(false);
     const [comments, setComments] = useState([]);
@@ -90,33 +96,45 @@ export const Post = ({ post: { id, title, message, ranking, date, commentsCount,
         console.log(response)
         setLoadingComments(false);
 
+        if (!isMounted.current)
+            return;
+
         if (response.success)
             setHasMoreComments(response.page < response.totalPages);
 
         return response
     }
-    const handleGetComments = async () => {
-        if (commentsCount === 0)
+    const handleGetComments = async (add) => {
+        if (!add)
+            setSeeComments(!seeComments);
+
+        if (commentsCount === 0 && comments.length == 0)
             return;
 
-        if (comments.length > 0) {
-            setComments([]);
-            setHasMoreComments(false);
-            return;
-        }
+        if (!add)
+            if (comments.length > 0) {
+                setComments([]);
+                setHasMoreComments(false);
+                return;
+            }
 
         const response = await getComments(1);
 
-        if (response.success) { }
-        setComments(response.result);
 
-        setSeeComments(!seeComments);
+        if (!isMounted.current)
+            return;
+
+        if (response.success) {
+            setComments(response.result);
+        }
+
     }
 
     const handleGetMoreComments = async () => {
         const response = await getComments(page + 1);
 
-        console.log(response)
+        if (!isMounted.current)
+            return;
 
         if (response.success) {
             setPage(page + 1);
@@ -125,13 +143,18 @@ export const Post = ({ post: { id, title, message, ranking, date, commentsCount,
     }
 
     const handleAddComment = async (data) => {
-        console.log(data)
         const response = await postAsync(endpoints.comments, { ...data, postId: id });
 
-        console.log(response);
+        if (!isMounted.current)
+            return;
+
         if (response.success) {
-            setComments([response.result, ...comments]);
+            reset();
+            handleGetComments(true);
+            return;
         }
+
+        dispatch(showSnack(response.message, 'error'));
     }
 
     return (
@@ -150,7 +173,7 @@ export const Post = ({ post: { id, title, message, ranking, date, commentsCount,
                     <Grid item xs={12} alignItems="flex-start">
                         <div>
                             <Name>{user.fullName}</Name>
-                            <Date>{capitalize(moment(date).fromNow())}</Date>
+                            <Date>{capitalize(moment(date).local().fromNow())}</Date>
                         </div>
                     </Grid>
                     <Grid item xs={12}>
@@ -167,7 +190,7 @@ export const Post = ({ post: { id, title, message, ranking, date, commentsCount,
                     <FormProvider {...methods}>
                         <form style={{ width: '100%' }} onSubmit={methods.handleSubmit(handleAddComment)}>
                             <Grid container item xs={12} alignItems='center' sx={{ p: 1 }}>
-                                <Grid item onClick={handleGetComments}>
+                                <Grid item onClick={() => handleGetComments()}>
                                     <SquareInfo text={`${commentsCount}`} icon={<FontAwesomeIcon color={color.secondary} icon={faComment} />} />
                                 </Grid>
                                 {
@@ -223,7 +246,7 @@ export const Post = ({ post: { id, title, message, ranking, date, commentsCount,
                         {
                             comments?.length > 0 && (
                                 comments.map(comment => (
-                                    <Comment key={shortid.generate()} comment={comment} />
+                                    <Comment key={shortid.generate()} comment={comment} isMounted={isMounted} dispatch={dispatch} userId={userId} />
                                 ))
                             )
                         }

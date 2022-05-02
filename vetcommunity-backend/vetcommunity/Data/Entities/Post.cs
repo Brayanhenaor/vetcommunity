@@ -3,7 +3,7 @@
     public class Post
     {
         public int Id { get; set; }
-        public DateTime Date { get; set; }
+        public DateTime Date { get; set; } = DateTime.UtcNow;
         public string Title { get; set; }
         public string Message { get; set; }
         public int Ranking { get; set; }

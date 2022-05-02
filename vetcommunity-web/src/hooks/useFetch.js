@@ -20,6 +20,7 @@ export const useFetch = (url) => {
     const getAsyncData = async () => {
       try {
         const dataGet = await axios.get(url);
+        console.log(dataGet)
         if (isMounted.current) {
           setState({
             error: null,

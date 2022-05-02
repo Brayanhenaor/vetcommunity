@@ -8,6 +8,6 @@ export const showSnack = (message, severity) => ({
     }
 });
 
-export const hideSnack = (message, severity) => ({
+export const hideSnack = () => ({
     type: type.hideSnack,
 });

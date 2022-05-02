@@ -12,8 +12,8 @@ using vetcommunity.Data;
 namespace vetcommunity.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20220417225944_userAtributtes")]
-    partial class userAtributtes
+    [Migration("20220501171958_db")]
+    partial class db
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -68,22 +68,22 @@ namespace vetcommunity.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "8fa0a9e7-5357-44b5-b1c4-ddddfd5ce6af",
-                            ConcurrencyStamp = "64490b65-e261-4744-bdba-e300dff44e80",
+                            Id = "5e0565b7-18b5-4a33-8536-b88e039bbc73",
+                            ConcurrencyStamp = "45cfbe08-666b-46c8-bea9-57f4fe7bfeca",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "fa97eac1-9f20-48a4-9a36-801eb5b3cbbb",
-                            ConcurrencyStamp = "84c53898-1566-498a-9ede-b48e27b96ad3",
+                            Id = "fdc33e06-c2c3-4e63-b1b0-f852aad93539",
+                            ConcurrencyStamp = "28b3bf4a-d59c-4eed-828a-6e02956fa480",
                             Name = "Normal",
                             NormalizedName = "NORMAL"
                         },
                         new
                         {
-                            Id = "e4686b3c-91e0-446c-b26b-d26445558d96",
-                            ConcurrencyStamp = "808c0a1f-18a8-41b6-a59c-d54212d1f70b",
+                            Id = "5b97abe7-dc1f-4b69-9531-5ab1e2384d1a",
+                            ConcurrencyStamp = "8b66ae73-0b5d-4466-b081-c3277dde4305",
                             Name = "Vet",
                             NormalizedName = "VET"
                         });
@@ -178,8 +178,8 @@ namespace vetcommunity.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = "37b5377e-aa27-4108-aa3e-e64f9a78f243",
-                            RoleId = "8fa0a9e7-5357-44b5-b1c4-ddddfd5ce6af"
+                            UserId = "9fc43527-5723-4e7f-b749-2f914138dae9",
+                            RoleId = "5e0565b7-18b5-4a33-8536-b88e039bbc73"
                         });
                 });
 
@@ -216,6 +216,38 @@ namespace vetcommunity.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Categories");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Alimentación"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Salud"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Higiene"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Vacunación"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Name = "Cuidados"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Name = "Veterinaria"
+                        });
                 });
 
             modelBuilder.Entity("vetcommunity.Data.Entities.CommentLike", b =>
@@ -303,6 +335,9 @@ namespace vetcommunity.Migrations
 
                     b.Property<string>("Comment")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("PostId")
                         .HasColumnType("int");
@@ -410,16 +445,18 @@ namespace vetcommunity.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "37b5377e-aa27-4108-aa3e-e64f9a78f243",
+                            Id = "9fc43527-5723-4e7f-b749-2f914138dae9",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "927fc877-b346-44f7-a20d-c67a50bb2682",
+                            ConcurrencyStamp = "0c5309b5-dfb3-4141-ba9f-336b3a4d0997",
                             EmailConfirmed = false,
+                            FullName = "User Admin",
                             LockoutEnabled = false,
                             NormalizedUserName = "ADMIN@ADMIN.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEKIjRkplXFUFGNJtj6d6+/eGOj5H+VD9TVp/HE2KUlNSALEtY522b5noloLfMzcD3A==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEBESTs56ZpvSWHqXsBzFTSiCZYKyNAtBcdYHJStA2OBxXPVu1qKk4XH+tyjUHi3r+A==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "81432c0c-1363-4fb3-acb7-dc1122f9078f",
+                            SecurityStamp = "718150fc-be6f-479c-bc0a-7c3cbf8e5816",
                             TwoFactorEnabled = false,
+                            UrlPhoto = "https://cdn.now.howstuffworks.com/media-content/0b7f4e9b-f59c-4024-9f06-b3dc12850ab7-1920-1080.jpg",
                             UserName = "admin@admin.com"
                         });
                 });

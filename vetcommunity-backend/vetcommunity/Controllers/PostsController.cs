@@ -41,9 +41,16 @@
                 {
                     Success = false
                 });
+            ICollection<Category> categories = new List<Category>();
+
+            foreach (var item in postRequest.Categories)
+            {
+                categories.Add(await dataContext.Categories.FindAsync(item.Id));
+            }
 
             Post post = mapper.Map<Post>(postRequest);
             post.User = user;
+            post.Categories = categories;
 
             await dataContext.AddAsync(post);
             await dataContext.SaveChangesAsync();

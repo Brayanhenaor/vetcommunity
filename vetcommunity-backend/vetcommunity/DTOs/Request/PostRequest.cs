@@ -5,9 +5,6 @@ namespace vetcommunity.DTOs.Request
     public class PostRequest
     {
         [Required]
-        public DateTime Date { get; set; }
-
-        [Required]
         public string Title { get; set; }
         [Required]
         public string Message { get; set; }

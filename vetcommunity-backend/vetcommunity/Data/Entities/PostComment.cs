@@ -14,8 +14,7 @@ namespace vetcommunity.Data.Entities
 
         public string Comment { get; set; }
 
-        [JsonIgnore]
-        public DateTime Date { get; set; } = DateTime.Now;
+        public DateTime Date { get; set; } = DateTime.UtcNow;
 
         public ICollection<CommentLike> CommentLikes { get; set; }
     }

@@ -4,13 +4,13 @@ import shortid from 'shortid'
 import { Post } from './Post'
 
 export const PostList = ({ posts }) => {
-    const { isLogued } = useSelector(state => state.auth);
+    const { isLogued, id } = useSelector(state => state.auth);
 
     return (
         <>
             {
                 posts?.map(post => (
-                    <Post key={shortid.generate()} isLogued={isLogued} post={post} />
+                    <Post key={shortid.generate()} isLogued={isLogued} userId={id} post={post} />
                 ))
             }
         </>

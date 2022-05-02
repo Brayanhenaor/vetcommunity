@@ -75,6 +75,7 @@ namespace vetcommunity.Controllers
                 {
                     Token = new JwtSecurityTokenHandler().WriteToken(token),
                     Expiration = token.ValidTo,
+                    Id = user.Id,
                     Roles = userRoles
                 }
             };
