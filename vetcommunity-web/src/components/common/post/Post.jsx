@@ -1,4 +1,4 @@
-import { Avatar, Box, Grid } from '@mui/material'
+import { Avatar, Box, Chip, Grid } from '@mui/material'
 import { styled } from '@mui/system';
 import React, { useState } from 'react'
 import { color } from '../../../utils/color'
@@ -19,6 +19,7 @@ import { Comment } from './Comment';
 import { showSnack } from '../../../actions/ui';
 import { useIsMounted } from '../../../hooks/useIsMounted';
 import { useDispatch } from 'react-redux';
+import { blueGrey, deepOrange, green, grey, lightBlue, lightGreen, teal } from '@mui/material/colors';
 
 const Name = styled('h5')({
     margin: 0,
@@ -55,6 +56,17 @@ const Hr = styled('hr')({
     border: 'none'
 });
 
+const colors = [
+    color.secondary,
+    teal[800],
+    lightGreen[800],
+    deepOrange[800],
+    lightBlue[900],
+    green[900],
+    grey[900],
+    blueGrey['A700']
+]
+
 const SquareInfo = ({ icon: Icon, text }) => {
     return (
         <Box component='div'
@@ -77,10 +89,10 @@ const SquareInfo = ({ icon: Icon, text }) => {
     )
 }
 
-export const Post = ({ post: { id, title, message, ranking, date, commentsCount, user }, isLogued, userId }) => {
+export const Post = ({ post: { id, title, message, ranking, date, commentsCount, user, categories }, isLogued, userId }) => {
     moment.locale('es');
     const methods = useForm();
-    const {reset} = methods;
+    const { reset } = methods;
     const isMounted = useIsMounted();
     const dispatch = useDispatch();
 
@@ -185,6 +197,18 @@ export const Post = ({ post: { id, title, message, ranking, date, commentsCount,
                         <Message>
                             {message}
                         </Message>
+                    </Grid>
+                    <Grid container gap={1}>
+                        {
+                            categories?.map(category => (
+                                <Chip key={category.id} label={category.name} sx={{
+                                    color: color.primary,
+                                    p: 0,
+                                    bgcolor: colors[Math.floor(Math.random() * colors.length,
+                                    )]
+                                }} />
+                            ))
+                        }
                     </Grid>
 
                     <FormProvider {...methods}>

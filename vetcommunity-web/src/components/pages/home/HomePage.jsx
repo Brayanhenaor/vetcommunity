@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import { Container, Tab, Tabs } from '@mui/material'
 import { Box } from '@mui/system';
-import React, { useEffect } from 'react'
+import React from 'react'
 import { useSelector } from 'react-redux';
 import { endpoints } from '../../../api/endpoint';
 import { useFetch } from '../../../hooks/useFetch';

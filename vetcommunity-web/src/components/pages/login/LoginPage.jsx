@@ -12,7 +12,6 @@ import pets from '../../../img/pets.webp'
 import { route } from '../../../router/routes'
 import { color } from '../../../utils/color'
 import { Button } from '../../common/button/Button'
-import { OutlinedButton } from '../../common/button/OutlinedButton'
 import { FormCardImage } from '../../common/form/FormCardImage'
 import { Input } from '../../common/input/Input'
 
@@ -61,7 +60,7 @@ export const LoginPage = () => {
       </Grid>
 
       <Grid item xs={12}>
-        <OutlinedButton onClick={() => navigate(route.register)}>Registrate</OutlinedButton>
+        <Button outlined onClick={() => navigate(route.register)}>Registrate</Button>
       </Grid>
 
       <Grid container justifyContent={'center'} item xs={12}>

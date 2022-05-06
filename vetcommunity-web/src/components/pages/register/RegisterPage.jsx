@@ -5,7 +5,6 @@ import dog from '../../../img/dog.webp'
 import { Grid, Typography } from '@mui/material'
 import { Input } from '../../common/input/Input'
 import { Button } from '../../common/button/Button'
-import { OutlinedButton } from '../../common/button/OutlinedButton'
 import { useNavigate } from 'react-router-dom'
 import { route } from '../../../router/routes'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
@@ -62,7 +61,7 @@ export const RegisterPage = () => {
             </Grid>
 
             <Grid item xs={12}>
-                <OutlinedButton startIcon={<ArrowBackIcon />} onClick={() => navigate(route.login)}>Iniciar sesión</OutlinedButton>
+                <Button outlined startIcon={<ArrowBackIcon />} onClick={() => navigate(route.login)}>Iniciar sesión</Button>
             </Grid>
         </FormCardImage>
     )

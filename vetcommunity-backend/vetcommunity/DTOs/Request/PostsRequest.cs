@@ -4,7 +4,7 @@
 
     public class PostsRequest : PagingRequest
 	{
-        public PostOrder OrderBy { get; set; }
+        public PostOrder OrderBy { get; set; } = PostOrder.Date;
     }
 }
 
