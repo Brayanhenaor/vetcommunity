@@ -92,5 +92,27 @@ namespace vetcommunity.Resources {
                 return ResourceManager.GetString("UserNotFound", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Usuario ya existe.
+        /// </summary>
+        internal static string UserAlreadyExists
+        {
+            get
+            {
+                return ResourceManager.GetString("UserAlreadyExists", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Error al crear el usuario.
+        /// </summary>
+        internal static string ErrorCreatingUser
+        {
+            get
+            {
+                return ResourceManager.GetString("ErrorCreatingUser", resourceCulture);
+            }
+        }
     }
 }
