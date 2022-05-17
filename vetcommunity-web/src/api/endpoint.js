@@ -9,5 +9,6 @@ export const endpoints = {
     categories: '/Categories',
     ranking: '/Posts/AddSubtractRanking',
     search: '/Posts/Search',
-    notifications: '/Notifications'
+    notifications: '/Notifications',
+    register: '/User/Register'
 }
