@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import { Container, Tab, Tabs } from '@mui/material'
 import { Box } from '@mui/system';
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux';
 import { endpoints } from '../../../api/endpoint';
 import { useFetch } from '../../../hooks/useFetch';
@@ -9,6 +9,8 @@ import { color } from '../../../utils/color';
 import { Spinner } from '../../common/loader/Spinner';
 import { PostList } from '../../common/post/PostList';
 import { CreateQuestion } from './CreateQuestion';
+import useInfiniteScroll from 'react-infinite-scroll-hook';
+import { getAsync } from '../../../api/apiService';
 
 const StyledTabs = styled((props) => (
     <Tabs
@@ -42,12 +44,54 @@ const StyledTab = styled((props) => <Tab disableRipple {...props} />)(
 
 
 export const HomePage = () => {
+    const [value, setValue] = React.useState(0);
+    const [page, setPage] = useState(1);
+    const [posts, setPosts] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [hasNextPage, setHasNextPage] = useState(false);
+
+    const [sentryRef] = useInfiniteScroll({
+        onLoadMore: () => handleNewPage(page + 1),
+        hasNextPage: hasNextPage,
+        rootMargin: '0px 0px 400px 0px',
+        loading: loading
+    });
+
+    useEffect(() => {
+        handleGetItems(1, 0);
+    }, [])
+
+    const handleGetItems = async (newPage, order) => {
+        setLoading(true);
+
+        const response = await getAsync(`${endpoints.allPosts}?OrderBy=${order}&Page=${newPage}`);
+
+        if (response.success) {
+            setPosts(current => ([
+                ...(order !== value ? [] : current),
+                ...response.result
+            ]));
+            setHasNextPage(response?.page < response?.totalPages)
+        }
+
+        setLoading(false);
+    }
+
+    const handleNewPage = async (newPage) => {
+        setPage(newPage);
+        handleGetItems(newPage, value);
+    }
+
+    // useEffect(() => {
+    //     if (data !== null)
+    //         setPosts(data.result);
+    // }, [data])
+
     const { isLogued } = useSelector(state => state.auth);
 
-    const [value, setValue] = React.useState(0);
-    const { data, loading } = useFetch(`${endpoints.allPosts}?OrderBy=${value}`);
-
-    const handleChange = (event, newValue) => {
+    const handleChange = async (event, newValue) => {
+        setPage(1);
+        await handleGetItems(1, newValue);
         setValue(newValue);
     };
 
@@ -68,8 +112,9 @@ export const HomePage = () => {
                     <StyledTab label="Más respondidas" />
                 </StyledTabs>
             </Box>
+            <PostList posts={posts} />
             <Spinner loading={loading} />
-            <PostList posts={data?.result} />
+            <div ref={sentryRef} />
         </Container>
     )
 }

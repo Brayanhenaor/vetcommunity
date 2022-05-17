@@ -1,5 +1,5 @@
 import { Avatar, Box, Chip, Grid } from '@mui/material'
-import { styled } from '@mui/system';
+import { borderRadius, styled } from '@mui/system';
 import React, { useState } from 'react'
 import { color } from '../../../utils/color'
 import { Raking } from '../raking/Raking'
@@ -11,7 +11,7 @@ import { BasicInput } from '../input/BasicInput';
 import SendIcon from '@mui/icons-material/Send';
 import { FormProvider, useForm } from 'react-hook-form';
 import { Spinner } from '../loader/Spinner';
-import { getAsync, postAsync } from '../../../api/apiService';
+import { getAsync, postAsync, putAsync } from '../../../api/apiService';
 import { endpoints } from '../../../api/endpoint';
 import shortid from 'shortid';
 import { capitalize } from 'lodash'
@@ -19,7 +19,7 @@ import { Comment } from './Comment';
 import { showSnack } from '../../../actions/ui';
 import { useIsMounted } from '../../../hooks/useIsMounted';
 import { useDispatch } from 'react-redux';
-import { blueGrey, deepOrange, green, grey, lightBlue, lightGreen, teal } from '@mui/material/colors';
+import { blueGrey, deepOrange, green, grey, lightBlue, lightGreen, orange, teal, yellow } from '@mui/material/colors';
 
 const Name = styled('h5')({
     margin: 0,
@@ -91,6 +91,7 @@ const SquareInfo = ({ icon: Icon, text }) => {
 
 export const Post = ({ post: { id, title, message, ranking, date, commentsCount, user, categories }, isLogued, userId }) => {
     moment.locale('es');
+    const { isVeterinary } = user;
     const methods = useForm();
     const { reset } = methods;
     const isMounted = useIsMounted();
@@ -101,6 +102,8 @@ export const Post = ({ post: { id, title, message, ranking, date, commentsCount,
     const [hasMoreComments, setHasMoreComments] = useState(false);
     const [page, setPage] = useState(1);
     const [seeComments, setSeeComments] = useState(false);
+    const [postRanking, setPostRanking] = useState(ranking);
+    const [commentsQuantity, setCommentsQuantity] = useState(commentsCount);
 
     const getComments = async (page) => {
         setLoadingComments(true);
@@ -117,10 +120,11 @@ export const Post = ({ post: { id, title, message, ranking, date, commentsCount,
         return response
     }
     const handleGetComments = async (add) => {
+        console.log('llego', add)
         if (!add)
             setSeeComments(!seeComments);
 
-        if (commentsCount === 0 && comments.length == 0)
+        if ((commentsCount === 0 && comments.length == 0) && !add)
             return;
 
         if (!add)
@@ -130,14 +134,18 @@ export const Post = ({ post: { id, title, message, ranking, date, commentsCount,
                 return;
             }
 
+        console.log('por aca')
         const response = await getComments(1);
 
 
+        console.log(response)
         if (!isMounted.current)
             return;
 
+        console.log(response)
         if (response.success) {
             setComments(response.result);
+            setCommentsQuantity(response.totalRecords);
         }
 
     }
@@ -169,6 +177,20 @@ export const Post = ({ post: { id, title, message, ranking, date, commentsCount,
         dispatch(showSnack(response.message, 'error'));
     }
 
+    const handleAddSubtractRanking = async (add) => {
+        const response = await putAsync(endpoints.ranking, {
+            postId: id,
+            add
+        });
+
+        if (response.success) {
+            setPostRanking(response.result?.ranking);
+            return;
+        }
+
+        dispatch(showSnack(response.message, 'warning'));
+    }
+
     return (
         <>
             <Grid container
@@ -177,14 +199,36 @@ export const Post = ({ post: { id, title, message, ranking, date, commentsCount,
                 style={{ backgroundColor: color.primary, width: '100%' }}>
 
                 <Grid container item xs={2} alignItems={'center'} direction='column'>
-                    <Avatar alt="Brayan" src={user.urlPhoto} />
-                    <Raking raking={ranking} />
+                    <div style={{ position: 'relative' }}>
+                        <Avatar alt="Brayan" src={user?.urlPhoto} />
+                        {
+                            isVeterinary && (
+                                <div style={{
+                                    position: 'absolute',
+                                    top: '50%',
+                                    left: '50%',
+                                    transform: 'translate(-50%, -50%)',
+                                    width: '120%',
+                                    height: '120%',
+                                    border: `3px solid ${orange[900]}`,
+                                    borderRadius: '50%'
+                                }} />)
+                        }
+                    </div>
+                    <Raking handleAddSubtractRanking={handleAddSubtractRanking} raking={postRanking} />
                 </Grid>
 
                 <Grid container item xs={10}>
                     <Grid item xs={12} alignItems="flex-start">
                         <div>
-                            <Name>{user.fullName}</Name>
+                            <div style={{ display: 'flex', gap: 10 }}>
+                                <Name>{user?.fullName}</Name>
+                                {
+                                    isVeterinary && (
+                                        <span style={{ color: orange[900] }}>Veterinario</span>
+                                    )
+                                }
+                            </div>
                             <Date>{capitalize(moment(date).local().fromNow())}</Date>
                         </div>
                     </Grid>
@@ -204,8 +248,7 @@ export const Post = ({ post: { id, title, message, ranking, date, commentsCount,
                                 <Chip key={category.id} label={category.name} sx={{
                                     color: color.primary,
                                     p: 0,
-                                    bgcolor: colors[Math.floor(Math.random() * colors.length,
-                                    )]
+                                    bgcolor: colors[Math.floor(Math.random() * colors.length)]
                                 }} />
                             ))
                         }
@@ -215,12 +258,12 @@ export const Post = ({ post: { id, title, message, ranking, date, commentsCount,
                         <form style={{ width: '100%' }} onSubmit={methods.handleSubmit(handleAddComment)}>
                             <Grid container item xs={12} alignItems='center' sx={{ p: 1 }}>
                                 <Grid item onClick={() => handleGetComments()}>
-                                    <SquareInfo text={`${commentsCount}`} icon={<FontAwesomeIcon color={color.secondary} icon={faComment} />} />
+                                    <SquareInfo text={`${commentsQuantity}`} icon={<FontAwesomeIcon color={color.secondary} icon={faComment} />} />
                                 </Grid>
                                 {
                                     (isLogued && seeComments) && (
                                         <Grid item container sx={{ gap: '10px', flexWrap: 'nowrap', marginTop: 2 }} justifyContent='center' alignItems='center' xs={12}>
-                                            <Avatar alt="Brayan" src={user.urlPhoto} />
+                                            <Avatar alt="Brayan" src={user?.urlPhoto} />
                                             <BasicInput
                                                 name="comment"
                                                 multiline

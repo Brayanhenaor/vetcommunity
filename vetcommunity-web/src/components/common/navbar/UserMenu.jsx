@@ -24,7 +24,7 @@ const menu = [
     }
 ]
 
-export const UserMenu = () => {
+export const UserMenu = ({ urlPhoto }) => {
     const dispatch = useDispatch();
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
@@ -47,7 +47,7 @@ export const UserMenu = () => {
 
     return (
         <>
-            <Avatar alt="Brayan" style={{ cursor: 'pointer' }} onClick={handleClick} src="https://caricom.org/wp-content/uploads/Floyd-Morris-Remake-1024x879-1.jpg" />
+            <Avatar alt="Brayan" style={{ cursor: 'pointer' }} onClick={handleClick} src={urlPhoto} />
             <Menu
                 id="basic-menu"
                 anchorEl={anchorEl}

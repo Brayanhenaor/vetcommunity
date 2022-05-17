@@ -58,6 +58,15 @@ namespace vetcommunity.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No puedes dar puntos a tu propia pregunta.
+        /// </summary>
+        internal static string AddRankingNotPermitted {
+            get {
+                return ResourceManager.GetString("AddRankingNotPermitted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Se realizo el comentario correctamente.
         /// </summary>
         internal static string CommentCreated {

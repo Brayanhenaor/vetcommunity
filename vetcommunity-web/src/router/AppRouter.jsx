@@ -8,15 +8,17 @@ import { FullPageSpinner } from "../components/common/loader/FullPageSpinner";
 import { useDispatch, useSelector } from "react-redux";
 import { PublicRoute } from "./PublicRoute";
 import { Alert, Snackbar } from "@mui/material";
-import { type } from "../utils/types";
 import { hideSnack } from "../actions/ui";
 import { useEffect } from "react";
 import { RegisterPage } from "../components/pages/register/RegisterPage";
 import axios from "axios";
+import { PrivateRouter } from "./PrivateRoute";
+import { MyQuestionsPage } from "../components/pages/myQuestions/MyQuestionsPage";
+import { SearchResultsPage } from "../components/pages/search/SearchResultsPage";
 
 export const AppRouter = () => {
     const { ui: { loading, snackbar }, auth } = useSelector(state => state);
-    const { isLogued,token } = auth;
+    const { isLogued, token } = auth;
     const dispatch = useDispatch();
 
     const handleCloseSnack = () => {
@@ -26,7 +28,6 @@ export const AppRouter = () => {
     useEffect(() => {
         if (isLogued) {
             localStorage.setItem('VETUSER', JSON.stringify(auth));
-            axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
             return;
         }
 
@@ -72,6 +73,22 @@ export const AppRouter = () => {
                             navBar={false}
                             isLogued={isLogued}
                             component={RegisterPage} />
+                    } />
+
+                <Route
+                    path={route.search}
+                    element={
+                        <PublicRoute
+                            component={SearchResultsPage} />
+                    } />
+
+                <Route
+                    path={route.myQuestions}
+                    element={
+                        <PrivateRouter
+                            restricted
+                            isLogued={isLogued}
+                            component={MyQuestionsPage} />
                     } />
 
                 <Route path="*" element={<Navigate to={route.home} />} />

@@ -1,3 +1,4 @@
+import axios from "axios";
 import { type } from "../utils/types";
 
 const initAuthReducer = {
@@ -9,8 +10,11 @@ const initAuthReducer = {
 
 const initializeAuth = () => {
     const user = localStorage.getItem('VETUSER');
-    if (user !== null)
-        return JSON.parse(user)
+    if (user !== null) {
+        const userData = JSON.parse(user)
+        axios.defaults.headers.common['Authorization'] = `Bearer ${userData.token}`;
+        return userData;
+    }
 
     return initAuthReducer;
 }

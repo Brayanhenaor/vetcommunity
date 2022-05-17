@@ -7,8 +7,9 @@ export const Spinner = ({ loading }) => {
     return (
         <>
             {loading && (
-                <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
                     <CircularProgress sx={{ color: color.secondary }} />
+                    <span>Cargando...</span>
                 </Box>
             )}
         </>

@@ -2,6 +2,7 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -19,12 +20,15 @@ namespace vetcommunity.Controllers
         private readonly UserManager<User> userManager;
         private readonly RoleManager<IdentityRole> roleManager;
         private readonly IConfiguration configuration;
+        private readonly IMapper mapper;
 
-        public UserController(UserManager<User> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration)
+        public UserController(UserManager<User> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration,
+            IMapper mapper)
         {
             this.userManager = userManager;
             this.roleManager = roleManager;
             this.configuration = configuration;
+            this.mapper = mapper;
         }
 
         [HttpPost("Login")]
@@ -76,7 +80,8 @@ namespace vetcommunity.Controllers
                     Token = new JwtSecurityTokenHandler().WriteToken(token),
                     Expiration = token.ValidTo,
                     Id = user.Id,
-                    Roles = userRoles
+                    Roles = userRoles,
+                    User = mapper.Map<UserResponse>(user)
                 }
             };
         }

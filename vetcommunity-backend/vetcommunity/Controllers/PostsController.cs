@@ -83,6 +83,7 @@
                     Ranking = post.Ranking,
                     UrlImage = post.UrlImage,
                     CommentsCount = post.PostComments.Count(),
+                    User = mapper.Map<UserResponse>(post.User),
                     Categories = mapper.Map<ICollection<CategoryResponse>>(post.Categories),
                     Date = post.Date
                 }).PagingAsync(pagingRequest);
@@ -94,6 +95,67 @@
                 Page = result.page,
                 TotalPages = result.totalPages,
                 Result = mapper.Map<ICollection<PostResponse>>(result.results)
+            };
+        }
+
+        [AllowAnonymous]
+        [HttpGet("Search")]
+        public async Task<ActionResult<PagingResponse<ICollection<PostResponse>>>> SearchPostsAsync([FromQuery] SearchPostRequest pagingRequest)
+        {
+            (int totalRecords, int page, int totalPages, ICollection<PostResponse> results) result = await dataContext.Posts
+                .Where(post => post.Title.ToLower().Contains(pagingRequest.Query.ToLower())
+                || post.Message.ToLower().Contains(pagingRequest.Query.ToLower()))
+                .Select(post => new PostResponse
+                {
+                    Id = post.Id,
+                    Title = post.Title,
+                    Message = post.Message,
+                    Ranking = post.Ranking,
+                    UrlImage = post.UrlImage,
+                    CommentsCount = post.PostComments.Count(),
+                    User = mapper.Map<UserResponse>(post.User),
+                    Categories = mapper.Map<ICollection<CategoryResponse>>(post.Categories),
+                    Date = post.Date
+                }).PagingAsync(pagingRequest);
+
+
+            return new PagingResponse<ICollection<PostResponse>>
+            {
+                TotalRecords = result.totalRecords,
+                Page = result.page,
+                TotalPages = result.totalPages,
+                Result = mapper.Map<ICollection<PostResponse>>(result.results)
+            };
+        }
+
+        [HttpPut("AddSubtractRanking")]
+        public async Task<ActionResult<Response<PostResponse>>> UpdateRankingAsync(RankingPostRequest rankingPostRequest)
+        {
+            Post post = await dataContext.Posts.FindAsync(rankingPostRequest.PostId);
+            string userToken = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name).Value;
+
+            User user = await userManager.FindByNameAsync(userToken);
+
+            if (post == null)
+                return NotFound(new Response
+                {
+                    Success = false,
+                });
+
+            if (post.UserId == user.Id)
+                return BadRequest(new Response
+                {
+                    Success = false,
+                    Message = Messages.AddRankingNotPermitted
+                });
+
+            post.Ranking = rankingPostRequest.Add ? post.Ranking + 1 : post.Ranking - 1;
+
+            await dataContext.SaveChangesAsync();
+
+            return new Response<PostResponse>
+            {
+                Result = mapper.Map<PostResponse>(post)
             };
         }
 

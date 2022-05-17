@@ -15,7 +15,7 @@ export const PrivateRouter = memo(({ isLogued, navBar = true, component: Compone
         }
         <Component />
       </>
-      : <Navigate to={route.home} />
+      : <Navigate to={route.login} />
   )
 });
 

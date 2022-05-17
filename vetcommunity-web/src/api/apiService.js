@@ -22,3 +22,14 @@ export const postAsync = async (endpoint, data) => {
         return error.response.data;
     }
 }
+
+export const putAsync = async (endpoint, data) => {
+    try {
+        const response = await axios.put(endpoint, data);
+
+        return response.data;
+
+    } catch (error) {
+        return error.response.data;
+    }
+}

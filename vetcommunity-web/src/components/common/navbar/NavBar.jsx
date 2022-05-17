@@ -59,7 +59,7 @@ const menu = [
     },
     {
         title: 'Mis preguntas',
-        to: 'about'
+        to: route.myQuestions
     },
     {
         title: 'Perfil',
@@ -71,8 +71,11 @@ export const Navbar = () => {
     const [value, setValue] = useState(route.home);
     const navigate = useNavigate();
 
-    const { isLogued } = useSelector(state => state.auth);
+    const { isLogued, user } = useSelector(state => state.auth);
 
+    const handleSearch = (query) => {
+        navigate(route.search.replace(':query', query));
+    }
     return (
         <>
             <Box sx={{ flexGrow: 1 }}>
@@ -112,13 +115,13 @@ export const Navbar = () => {
                                 padding: '6px 15px'
                             }}>
                                 <FontAwesomeIcon icon={faMagnifyingGlass} color={color.lightGray} style={{ paddingRight: 10 }} />
-                                <StyledInputBase placeholder='Buscar...' />
+                                <StyledInputBase onKeyDown={e => e.key === 'Enter' && handleSearch(e.target.value)} placeholder='Buscar...' />
                             </div>
 
                             {
                                 isLogued ? (
                                     <>
-                                    <UserMenu/>
+                                        <UserMenu urlPhoto={user?.urlPhoto} />
                                         <Notifications />
                                     </>
 
@@ -133,7 +136,7 @@ export const Navbar = () => {
                     </Toolbar>
                 </AppBar>
             </Box>
-            <Paper sx={{ position: 'fixed', bottom: 0, zIndex:999, left: 0, right: 0, display: { md: 'none' } }} elevation={3}>
+            <Paper sx={{ position: 'fixed', bottom: 0, zIndex: 999, left: 0, right: 0, display: { md: 'none' } }} elevation={3}>
                 <BottomNavigation
                     value={value}
                     onChange={(event, newValue) => {

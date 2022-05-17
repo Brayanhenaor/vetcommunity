@@ -1,5 +1,5 @@
-import { Avatar, Card } from '@mui/material'
-import { Box } from '@mui/system'
+import { Avatar, Card, IconButton } from '@mui/material'
+import { Box, styled } from '@mui/system'
 import React, { useEffect, useState } from 'react'
 import { Button } from '../../common/button/Button'
 import SendIcon from '@mui/icons-material/Send';
@@ -10,45 +10,72 @@ import { useFetch } from '../../../hooks/useFetch';
 import { endpoints } from '../../../api/endpoint';
 import { useLoading } from '../../../hooks/useLoading';
 import { postAsync } from '../../../api/apiService';
+import { useDispatch } from 'react-redux';
+import { showSnack } from '../../../actions/ui';
+import { color } from '../../../utils/color';
+import CloseIcon from '@mui/icons-material/Close';
 
+const SendButton = styled(IconButton)({
+    color: color.primary,
+    backgroundColor: color.secondary,
+    '&:hover': {
+        backgroundColor: color.lightSecondary2,
+    }
+});
+
+const CancelButton = styled(IconButton)({
+    color: color.primary,
+    backgroundColor: color.red,
+    marginRight: 10,
+    '&:hover': {
+        backgroundColor: color.ligthRed,
+    }
+});
 
 export const CreateQuestion = () => {
     const [editing, setEditing] = useState(false);
     const { data: categories } = useFetch(endpoints.categories);
     const setLoading = useLoading();
 
-    useEffect(() => {
-        console.log(categories);
-    }, [categories])
-
     const methods = useForm();
+    const { reset } = methods;
 
     const handleChangeEditing = () => {
         setEditing(!editing);
     }
 
+    const dispatch = useDispatch();
+
     const handleSubmit = async (data) => {
-        console.log(data);
-
-        console.log({
-            ...data,
-            categories: data.categories.map(category => ({ id: categories.result.find(c => c.name === category).id }))
-        });
-
         setLoading(true);
-        
+
         const response = await postAsync(endpoints.addPosts, {
             ...data,
             categories: data.categories.map(category => ({ id: categories.result.find(c => c.name === category).id }))
         });
-        
+
         setLoading(false);
-        console.log(response);
+
+        if (!response.success) {
+            dispatch(showSnack(response.message, 'error'));
+            return;
+        }
+
+        reset();
+        handleChangeEditing();
     }
 
     return (
         <div>
-            <Card sx={{ p: 2, borderRadius: 3, mr: { xs: 5, sm: 12 }, ml: { xs: 5, sm: 12 }, display: 'flex', alignItems: editing ? 'start' : 'center' }} elevation={2}>
+            <Card
+                sx={{
+                    p: 2,
+                    borderRadius: 3,
+                    mr: { xs: 5, sm: 12 },
+                    ml: { xs: 5, sm: 12 },
+                    display: 'flex',
+                    alignItems: editing ? 'start' : 'center'
+                }} elevation={0}>
                 <Avatar alt="Brayan" style={{ cursor: 'pointer' }} src="https://caricom.org/wp-content/uploads/Floyd-Morris-Remake-1024x879-1.jpg" />
                 {
                     !editing ? (
@@ -63,9 +90,7 @@ export const CreateQuestion = () => {
                                 }}>
                                 ¿Qué duda tienes?
                             </span>
-                            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
-                                <Button style={{ height: '1.8rem', marginTop: 0 }} endIcon={<SendIcon />} disabled>Publicar</Button>
-                            </Box>
+
                         </Box>
                     ) : (
                         <FormProvider {...methods}>
@@ -90,8 +115,14 @@ export const CreateQuestion = () => {
                                         name="categories"
                                         options={categories?.result} />
                                     <Box sx={{ 'flexBasis': '100%', display: 'flex', justifyContent: 'flex-end' }}>
-                                        <Button style={{ height: '2rem', marginTop: 0, width: 'auto', marginRight: 10 }} onClick={handleChangeEditing} outlined>Cancelar</Button>
-                                        <Button style={{ height: '2rem', marginTop: 0, width: 'auto' }} type="submit" endIcon={<SendIcon />} >Publicar</Button>
+                                        <CancelButton
+                                            onClick={handleChangeEditing}>
+                                            <CloseIcon />
+                                        </CancelButton>
+                                        <SendButton
+                                        type="submit">
+                                            <SendIcon />
+                                        </SendButton>
 
                                     </Box>
                                 </Box>

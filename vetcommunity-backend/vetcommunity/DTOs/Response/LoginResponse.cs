@@ -7,6 +7,7 @@ namespace vetcommunity.DTOs.Response
         public DateTime Expiration { get; set; }
         public IList<string> Roles { get; set; }
         public string Id { get; set; }
+        public UserResponse User { get; set; }
     }
 }
 

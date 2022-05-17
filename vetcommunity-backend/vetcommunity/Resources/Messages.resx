@@ -21,4 +21,7 @@
 	<data name="CommentCreated" xml:space="preserve">
 		<value>Se realizo el comentario correctamente</value>
 	</data>
+	<data name="AddRankingNotPermitted" xml:space="preserve">
+		<value>No puedes dar puntos a tu propia pregunta</value>
+	</data>
 </root>
