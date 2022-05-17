@@ -31,6 +31,7 @@ namespace vetcommunity.Migrations
                     UrlPhoto = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     AboutMe = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     FullName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsVeterinary = table.Column<bool>(type: "bit", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -178,7 +179,8 @@ namespace vetcommunity.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Message = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Viewed = table.Column<bool>(type: "bit", nullable: false),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    PostId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -318,15 +320,15 @@ namespace vetcommunity.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "5b97abe7-dc1f-4b69-9531-5ab1e2384d1a", "8b66ae73-0b5d-4466-b081-c3277dde4305", "Vet", "VET" },
-                    { "5e0565b7-18b5-4a33-8536-b88e039bbc73", "45cfbe08-666b-46c8-bea9-57f4fe7bfeca", "Admin", "ADMIN" },
-                    { "fdc33e06-c2c3-4e63-b1b0-f852aad93539", "28b3bf4a-d59c-4eed-828a-6e02956fa480", "Normal", "NORMAL" }
+                    { "055c0949-64e2-4ec6-a0d6-5492ccb27433", "e059ee15-9ee9-405c-b1ac-290a036ea73b", "Normal", "NORMAL" },
+                    { "062bd069-2c48-4b7c-849a-d833a9f213cb", "b0404d5c-e76b-4973-9de6-38d6ad480fb3", "Admin", "ADMIN" },
+                    { "ff78d007-ad91-46e3-86d1-92b8a705a1d6", "e51fa051-1fb8-4760-a594-cde48886d5fd", "Vet", "VET" }
                 });
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
-                columns: new[] { "Id", "AboutMe", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FullName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UrlPhoto", "UserName" },
-                values: new object[] { "9fc43527-5723-4e7f-b749-2f914138dae9", null, 0, "0c5309b5-dfb3-4141-ba9f-336b3a4d0997", null, false, "User Admin", false, null, null, "ADMIN@ADMIN.COM", "AQAAAAEAACcQAAAAEBESTs56ZpvSWHqXsBzFTSiCZYKyNAtBcdYHJStA2OBxXPVu1qKk4XH+tyjUHi3r+A==", null, false, "718150fc-be6f-479c-bc0a-7c3cbf8e5816", false, "https://cdn.now.howstuffworks.com/media-content/0b7f4e9b-f59c-4024-9f06-b3dc12850ab7-1920-1080.jpg", "admin@admin.com" });
+                columns: new[] { "Id", "AboutMe", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FullName", "IsVeterinary", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UrlPhoto", "UserName" },
+                values: new object[] { "a97b21c6-6ede-4b23-b654-7dabd3f21919", null, 0, "3059e82f-35d9-4aee-a3a2-7c4501d23d34", null, false, "User Admin", false, false, null, null, "ADMIN@ADMIN.COM", "AQAAAAEAACcQAAAAEJnSOeQ8/sNX88CB/4+vCzGm2hOCPFnGyc75px1gQyr4GBTj78lJYhmKsinFW2ixhQ==", null, false, "c88d1105-978b-4df2-993f-76e87d778b99", false, "https://cdn.now.howstuffworks.com/media-content/0b7f4e9b-f59c-4024-9f06-b3dc12850ab7-1920-1080.jpg", "admin@admin.com" });
 
             migrationBuilder.InsertData(
                 table: "Categories",
@@ -344,7 +346,7 @@ namespace vetcommunity.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetUserRoles",
                 columns: new[] { "RoleId", "UserId" },
-                values: new object[] { "5e0565b7-18b5-4a33-8536-b88e039bbc73", "9fc43527-5723-4e7f-b749-2f914138dae9" });
+                values: new object[] { "062bd069-2c48-4b7c-849a-d833a9f213cb", "a97b21c6-6ede-4b23-b654-7dabd3f21919" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",

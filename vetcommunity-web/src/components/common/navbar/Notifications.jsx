@@ -1,9 +1,15 @@
 import { faBell } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Badge, IconButton, Menu, MenuItem, styled } from '@mui/material'
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { color } from '../../../utils/color';
 import shortid from 'shortid';
+import { useNavigate } from 'react-router-dom';
+import { route } from '../../../router/routes';
+import { endpoints } from '../../../api/endpoint';
+import { useFetch } from '../../../hooks/useFetch';
+import nodata from '../../../img/nodata.jpeg';
+import { Box } from '@mui/system';
 
 const StyledBadge = styled(Badge)({
     '& .MuiBadge-badge': {
@@ -16,47 +22,46 @@ const StyledBadge = styled(Badge)({
     },
 });
 
-const notificationsFake = [
-    {
-        message: 'Mensaje notificacion 1',
-        viewed: false
-    },
-    {
-        message: 'Mensaje notificacion 2',
-        viewed: false
-    },
-    {
-        message: 'Mensaje notificacion 3',
-        viewed: false
-    },
-    {
-        message: 'Mensaje notificacion 4',
-        viewed: true
-    },
-    {
-        message: 'Mensaje notificacion 5',
-        viewed: true
-    },
-]
+export const Notifications = ({ userNotifications }) => {
+    const [notifications, setNotifications] = useState(userNotifications);
 
-export const Notifications = () => {
-    const [notifications, setNotifications] = useState(notificationsFake);
+    const { data, loading } = useFetch(endpoints.notifications);
 
+    const navigate = useNavigate();
     const [anchorEl, setAnchorEl] = useState(null);
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
     };
 
+    const handleTap = (postId) => {
+        navigate(route.post.replace(':id', postId));
+        handleClose();
+    };
+
+    const handleViewed = (id) => {
+
+    }
+
     const handleClose = () => {
-        setNotifications(notifications.map(notification => ({ ...notification, viewed: true })));
         setAnchorEl(null);
     };
+
+    useEffect(() => {
+        if (data !== null)
+            setNotifications(data.result)
+    }, [data])
+
+    useEffect(() => {
+        if (userNotifications !== null)
+            setNotifications(userNotifications)
+    }, [userNotifications])
+
 
     return (
         <div>
             <IconButton onClick={handleClick}>
-                <StyledBadge badgeContent={notifications.filter(notification => !notification.viewed)?.length}>
+                <StyledBadge badgeContent={notifications?.filter(notification => !notification.viewed)?.length}>
                     <FontAwesomeIcon icon={faBell} color={color.secondary} style={{ fontSize: 25, marginLeft: 10, transform: 'rotate(10deg)' }} />
                 </StyledBadge>
             </IconButton>
@@ -64,6 +69,7 @@ export const Notifications = () => {
                 id="simple-menu"
                 style={{ zIndex: '8000' }}
                 anchorEl={anchorEl}
+                onClose={handleClose}
                 keepMounted
                 anchorOrigin={{
                     vertical: "bottom",
@@ -74,15 +80,24 @@ export const Notifications = () => {
                     horizontal: "left",
                 }}
                 open={Boolean(anchorEl)}
-                onClick={handleClose}
-                onClose={handleClose}
                 PaperProps={{
                     sx: { borderRadius: '11px' },
                     elevation: 4,
                 }}
             >
-                {notifications.map(({ message, viewed }) => (
-                    <MenuItem key={shortid.generate()}>
+                {notifications?.length === 0 && (
+                    <Box 
+                    sx={{
+                        display:'flex',
+                        alignItems:'center',
+                        flexDirection:'column'
+                    }}>
+                        <img src={nodata} alt="" style={{width:220}} />
+                        <span style={{ textAlign: 'center', margin: 6, fontFamily: 'Raleway', color: color.gray }}>No tienes notificaciones</span>
+                    </Box>
+                )}
+                {notifications?.map(({ message, viewed, postId }) => (
+                    <MenuItem key={shortid.generate()} onClick={() => handleTap(postId)}>
                         <span>
                             {message}
                         </span>

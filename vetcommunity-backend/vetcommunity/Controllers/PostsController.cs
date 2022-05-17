@@ -12,6 +12,7 @@
     using vetcommunity.Resources;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
+    using Microsoft.EntityFrameworkCore;
 
     [ApiController]
     [Authorize]
@@ -125,6 +126,33 @@
                 Page = result.page,
                 TotalPages = result.totalPages,
                 Result = mapper.Map<ICollection<PostResponse>>(result.results)
+            };
+        }
+
+        [AllowAnonymous]
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Response<ICollection<PostResponse>>>> GetPostAsync(int id)
+        {
+            ICollection<PostResponse> result = await dataContext.Posts
+                .Select(post => new PostResponse
+                {
+                    Id = post.Id,
+                    Title = post.Title,
+                    Message = post.Message,
+                    Ranking = post.Ranking,
+                    UrlImage = post.UrlImage,
+                    CommentsCount = post.PostComments.Count(),
+                    User = mapper.Map<UserResponse>(post.User),
+                    Categories = mapper.Map<ICollection<CategoryResponse>>(post.Categories),
+                    Date = post.Date
+                })
+                .Where(post => post.Id==id)
+                .ToListAsync();
+
+
+            return new Response<ICollection<PostResponse>>
+            {
+                Result = mapper.Map<ICollection<PostResponse>>(result)
             };
         }
 

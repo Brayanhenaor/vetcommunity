@@ -12,6 +12,9 @@ using vetcommunity.DTOs.Request;
 using vetcommunity.DTOs.Response;
 using vetcommunity.Extensions;
 using vetcommunity.Resources;
+using Microsoft.AspNetCore.SignalR;
+using vetcommunity.Hubs;
+using vetcommunity.Services;
 
 namespace vetcommunity.Controllers
 {
@@ -23,12 +26,14 @@ namespace vetcommunity.Controllers
         private readonly DataContext dataContext;
         private readonly UserManager<User> userManager;
         private readonly IMapper mapper;
+        private readonly INotificationService notificationService;
 
-        public CommentsController(DataContext dataContext, UserManager<User> userManager, IMapper mapper)
+        public CommentsController(DataContext dataContext, UserManager<User> userManager, IMapper mapper, INotificationService notificationService)
         {
             this.dataContext = dataContext;
             this.userManager = userManager;
             this.mapper = mapper;
+            this.notificationService = notificationService;
         }
 
         [HttpPost]
@@ -43,6 +48,14 @@ namespace vetcommunity.Controllers
                 {
                     Success = false
                 });
+            Post post = await dataContext.Posts.Where(post => post.Id == commentRequest.PostId).Select(post => new Post
+            {
+                Id = post.Id,
+                User = post.User,
+                Title = post.Title
+            }).FirstOrDefaultAsync();
+
+            await notificationService.SendPostCommentNotification(post.User, user.FullName, post.Id, post.Title);
 
             PostComment comment = mapper.Map<PostComment>(commentRequest);
             comment.User = user;

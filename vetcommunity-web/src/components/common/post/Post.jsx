@@ -1,6 +1,6 @@
 import { Avatar, Box, Chip, Grid } from '@mui/material'
 import { borderRadius, styled } from '@mui/system';
-import React, { useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { color } from '../../../utils/color'
 import { Raking } from '../raking/Raking'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -19,7 +19,7 @@ import { Comment } from './Comment';
 import { showSnack } from '../../../actions/ui';
 import { useIsMounted } from '../../../hooks/useIsMounted';
 import { useDispatch } from 'react-redux';
-import { blueGrey, deepOrange, green, grey, lightBlue, lightGreen, orange, teal, yellow } from '@mui/material/colors';
+import { blueGrey, cyan, deepOrange, green, grey, indigo, lightBlue, lightGreen, lime, orange, teal, yellow } from '@mui/material/colors';
 
 const Name = styled('h5')({
     margin: 0,
@@ -64,7 +64,10 @@ const colors = [
     lightBlue[900],
     green[900],
     grey[900],
-    blueGrey['A700']
+    blueGrey['A700'],
+    indigo[900],
+    cyan[900],
+    lime[900]
 ]
 
 const SquareInfo = ({ icon: Icon, text }) => {
@@ -91,12 +94,14 @@ const SquareInfo = ({ icon: Icon, text }) => {
 
 export const Post = ({ post: { id, title, message, ranking, date, commentsCount, user, categories }, isLogued, userId }) => {
     moment.locale('es');
+    let intervalId = 0;
     const { isVeterinary } = user;
     const methods = useForm();
     const { reset } = methods;
     const isMounted = useIsMounted();
     const dispatch = useDispatch();
 
+    const [timeAgo, setTimeAgo] = useState(capitalize(moment(date).local().fromNow()));
     const [loadingComments, setLoadingComments] = useState(false);
     const [comments, setComments] = useState([]);
     const [hasMoreComments, setHasMoreComments] = useState(false);
@@ -105,10 +110,11 @@ export const Post = ({ post: { id, title, message, ranking, date, commentsCount,
     const [postRanking, setPostRanking] = useState(ranking);
     const [commentsQuantity, setCommentsQuantity] = useState(commentsCount);
 
+    const memoColor = useMemo(() => colors[Math.floor(Math.random() * colors.length)], []);
+
     const getComments = async (page) => {
         setLoadingComments(true);
         const response = await getAsync(`${endpoints.comments}?IdPost=${id}&Rows=5&Page=${page}`);
-        console.log(response)
         setLoadingComments(false);
 
         if (!isMounted.current)
@@ -120,7 +126,6 @@ export const Post = ({ post: { id, title, message, ranking, date, commentsCount,
         return response
     }
     const handleGetComments = async (add) => {
-        console.log('llego', add)
         if (!add)
             setSeeComments(!seeComments);
 
@@ -134,21 +139,19 @@ export const Post = ({ post: { id, title, message, ranking, date, commentsCount,
                 return;
             }
 
-        console.log('por aca')
         const response = await getComments(1);
-
-
         console.log(response)
+
         if (!isMounted.current)
             return;
 
-        console.log(response)
         if (response.success) {
             setComments(response.result);
             setCommentsQuantity(response.totalRecords);
         }
-
     }
+
+    
 
     const handleGetMoreComments = async () => {
         const response = await getComments(page + 1);
@@ -191,6 +194,13 @@ export const Post = ({ post: { id, title, message, ranking, date, commentsCount,
         dispatch(showSnack(response.message, 'warning'));
     }
 
+    useEffect(() => {
+        intervalId = setInterval(() => {
+            setTimeAgo(capitalize(moment(date).local().fromNow()));
+        }, 60000);
+        return () => clearInterval(intervalId)
+    }, [setTimeAgo])
+
     return (
         <>
             <Grid container
@@ -229,7 +239,7 @@ export const Post = ({ post: { id, title, message, ranking, date, commentsCount,
                                     )
                                 }
                             </div>
-                            <Date>{capitalize(moment(date).local().fromNow())}</Date>
+                            <Date>{timeAgo}</Date>
                         </div>
                     </Grid>
                     <Grid item xs={12}>
@@ -248,7 +258,7 @@ export const Post = ({ post: { id, title, message, ranking, date, commentsCount,
                                 <Chip key={category.id} label={category.name} sx={{
                                     color: color.primary,
                                     p: 0,
-                                    bgcolor: colors[Math.floor(Math.random() * colors.length)]
+                                    bgcolor: memoColor
                                 }} />
                             ))
                         }

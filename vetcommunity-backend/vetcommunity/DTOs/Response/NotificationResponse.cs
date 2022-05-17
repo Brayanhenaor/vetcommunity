@@ -1,15 +1,13 @@
-﻿namespace vetcommunity.Data.Entities
+﻿namespace vetcommunity.DTOs.Response
 {
-    public class Notification
+    public class NotificationResponse
     {
         public int Id { get; set; }
         public string Message { get; set; }
         public bool Viewed { get; set; }
-
-        public User User { get; set; }
-        public string UserId { get; set; }
-
         public int PostId { get; set; }
+
+        public UserResponse User { get; set; }
     }
 }
 

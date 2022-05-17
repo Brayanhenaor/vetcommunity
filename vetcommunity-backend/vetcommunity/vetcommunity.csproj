@@ -42,6 +42,8 @@
     <None Remove="Profiles\" />
     <None Remove="Extensions\" />
     <None Remove="System.Linq.Dynamic.Core" />
+    <None Remove="Hubs\" />
+    <None Remove="Services\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Data\" />
@@ -54,6 +56,8 @@
     <Folder Include="Filters\" />
     <Folder Include="Profiles\" />
     <Folder Include="Extensions\" />
+    <Folder Include="Hubs\" />
+    <Folder Include="Services\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Update="Resources\Messages.resx">

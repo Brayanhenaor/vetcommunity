@@ -11,8 +11,7 @@ import { endpoints } from '../../../api/endpoint';
 import { showSnack } from '../../../actions/ui';
 
 export const Comment = ({ comment, isMounted, dispatch, userId }) => {
-    const [likes, setLikes] = useState(comment.commentLikes);
-
+    const [likes, setLikes] = useState(comment?.commentLikes);
 
     const handleLikeUnlike = async (like) => {
         if (likes.filter(like => like.user.id === userId).length === 1 && likes.filter(like => like.user.id === userId)[0].recommended === like) {
@@ -40,7 +39,7 @@ export const Comment = ({ comment, isMounted, dispatch, userId }) => {
 
     return (
         <Grid item container className='animate__animated animate__fadeIn' sx={{ gap: '10px', flexWrap: 'nowrap', marginTop: 2 }} alignItems='flex-start' xs={12}>
-            <Avatar alt={comment.user?.fullName} src={comment.user?.urlPhoto} />
+            <Avatar alt={comment?.user?.fullName} src={comment?.user?.urlPhoto} />
 
             <Grid item container>
 
@@ -54,10 +53,10 @@ export const Comment = ({ comment, isMounted, dispatch, userId }) => {
                     bgcolor: color.lightGray2
                 }}>
                     <span style={{ fontSize: 13, fontWeight: 'bold' }}>
-                        {comment.user.fullName}
+                        {comment?.user?.fullName}
                     </span>
                     <span style={{ fontSize: 16, display: 'block' }}>
-                        {comment.comment}
+                        {comment?.comment}
                     </span>
                 </Box>
                 <Grid container item alignItems={'center'} sx={{ mt: 1 }} gap={1} xs={12}>
@@ -77,7 +76,7 @@ export const Comment = ({ comment, isMounted, dispatch, userId }) => {
                             onClick={() => handleLikeUnlike(true)}
                             sx={{ m: 0, p: 0.5 }}>
                             {
-                                likes.filter(like => like.user.id === userId)[0]?.recommended ? (
+                                likes?.filter(like => like.user.id === userId)[0]?.recommended ? (
                                     <ThumbUpIcon sx={{ fontSize: 17, color: color.lightSecondary, mr: 0.5 }} />
                                 ) : (
                                     <ThumbUpOffAltIcon sx={{ fontSize: 17, color: color.lightSecondary, mr: 0.5 }} />
@@ -85,7 +84,7 @@ export const Comment = ({ comment, isMounted, dispatch, userId }) => {
 
                             }
                             <span style={{ fontSize: 13, display: 'block' }}>
-                                {likes.filter(like => like.recommended).length}
+                                {likes?.filter(like => like.recommended).length}
                             </span>
                         </IconButton>
 
@@ -93,7 +92,7 @@ export const Comment = ({ comment, isMounted, dispatch, userId }) => {
                             onClick={() => handleLikeUnlike(false)}
                             sx={{ m: 0, p: 0.5 }}>
                             {
-                                likes.filter(like => like.user.id === userId)[0]?.recommended === false ? (
+                                likes?.filter(like => like.user.id === userId)[0]?.recommended === false ? (
                                     <ThumbDownIcon sx={{ fontSize: 17, color: color.red, mr: 0.5 }} />
                                 ) : (
                                     <ThumbDownOffAltIcon sx={{ fontSize: 17, color: color.red, mr: 0.5 }} />
@@ -101,12 +100,12 @@ export const Comment = ({ comment, isMounted, dispatch, userId }) => {
 
                             }
                             <span style={{ fontSize: 13, display: 'block' }}>
-                                {likes.filter(like => !like.recommended).length}
+                                {likes?.filter(like => !like.recommended).length}
                             </span>
                         </IconButton>
                     </Box>
                     <span style={{ fontSize: 12, display: 'block' }}>
-                        {moment(comment.date).local().fromNow()}
+                        {moment(comment?.date).local().fromNow()}
                     </span>
                 </Grid>
             </Grid>

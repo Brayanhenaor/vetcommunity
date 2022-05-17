@@ -12,7 +12,7 @@ using vetcommunity.Data;
 namespace vetcommunity.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20220501171958_db")]
+    [Migration("20220517162400_db")]
     partial class db
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -68,22 +68,22 @@ namespace vetcommunity.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "5e0565b7-18b5-4a33-8536-b88e039bbc73",
-                            ConcurrencyStamp = "45cfbe08-666b-46c8-bea9-57f4fe7bfeca",
+                            Id = "062bd069-2c48-4b7c-849a-d833a9f213cb",
+                            ConcurrencyStamp = "b0404d5c-e76b-4973-9de6-38d6ad480fb3",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "fdc33e06-c2c3-4e63-b1b0-f852aad93539",
-                            ConcurrencyStamp = "28b3bf4a-d59c-4eed-828a-6e02956fa480",
+                            Id = "055c0949-64e2-4ec6-a0d6-5492ccb27433",
+                            ConcurrencyStamp = "e059ee15-9ee9-405c-b1ac-290a036ea73b",
                             Name = "Normal",
                             NormalizedName = "NORMAL"
                         },
                         new
                         {
-                            Id = "5b97abe7-dc1f-4b69-9531-5ab1e2384d1a",
-                            ConcurrencyStamp = "8b66ae73-0b5d-4466-b081-c3277dde4305",
+                            Id = "ff78d007-ad91-46e3-86d1-92b8a705a1d6",
+                            ConcurrencyStamp = "e51fa051-1fb8-4760-a594-cde48886d5fd",
                             Name = "Vet",
                             NormalizedName = "VET"
                         });
@@ -178,8 +178,8 @@ namespace vetcommunity.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = "9fc43527-5723-4e7f-b749-2f914138dae9",
-                            RoleId = "5e0565b7-18b5-4a33-8536-b88e039bbc73"
+                            UserId = "a97b21c6-6ede-4b23-b654-7dabd3f21919",
+                            RoleId = "062bd069-2c48-4b7c-849a-d833a9f213cb"
                         });
                 });
 
@@ -278,6 +278,9 @@ namespace vetcommunity.Migrations
 
                     b.Property<string>("Message")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PostId")
+                        .HasColumnType("int");
 
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
@@ -394,6 +397,9 @@ namespace vetcommunity.Migrations
                     b.Property<string>("FullName")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsVeterinary")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
 
@@ -445,16 +451,17 @@ namespace vetcommunity.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "9fc43527-5723-4e7f-b749-2f914138dae9",
+                            Id = "a97b21c6-6ede-4b23-b654-7dabd3f21919",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "0c5309b5-dfb3-4141-ba9f-336b3a4d0997",
+                            ConcurrencyStamp = "3059e82f-35d9-4aee-a3a2-7c4501d23d34",
                             EmailConfirmed = false,
                             FullName = "User Admin",
+                            IsVeterinary = false,
                             LockoutEnabled = false,
                             NormalizedUserName = "ADMIN@ADMIN.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEBESTs56ZpvSWHqXsBzFTSiCZYKyNAtBcdYHJStA2OBxXPVu1qKk4XH+tyjUHi3r+A==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEJnSOeQ8/sNX88CB/4+vCzGm2hOCPFnGyc75px1gQyr4GBTj78lJYhmKsinFW2ixhQ==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "718150fc-be6f-479c-bc0a-7c3cbf8e5816",
+                            SecurityStamp = "c88d1105-978b-4df2-993f-76e87d778b99",
                             TwoFactorEnabled = false,
                             UrlPhoto = "https://cdn.now.howstuffworks.com/media-content/0b7f4e9b-f59c-4024-9f06-b3dc12850ab7-1920-1080.jpg",
                             UserName = "admin@admin.com"

@@ -12,10 +12,13 @@ import './nav.css';
 import { route } from '../../../router/routes';
 import { NavLink } from './NavLink';
 import { Notifications } from './Notifications';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { UserMenu } from './UserMenu';
+import { HubConnectionBuilder } from '@microsoft/signalr';
+import { getAsync } from '../../../api/apiService';
+import { endpoints } from '../../../api/endpoint';
 
 const Li = styled('li')({
     textDecoration: 'none',
@@ -70,12 +73,51 @@ const menu = [
 export const Navbar = () => {
     const [value, setValue] = useState(route.home);
     const navigate = useNavigate();
+    const [connection, setConnection] = useState(null);
+    const [notifications, setNotifications] = useState(null);
 
-    const { isLogued, user } = useSelector(state => state.auth);
+    const { isLogued, token, user } = useSelector(state => state.auth);
 
     const handleSearch = (query) => {
         navigate(route.search.replace(':query', query));
     }
+
+    useEffect(() => {
+        const newConnection = new HubConnectionBuilder()
+            .withUrl(process.env.REACT_APP_API_BASE_URL.replace('api', 'notificationHub'),
+                {
+                    accessTokenFactory: () => token,
+                })
+            .withAutomaticReconnect()
+            .build();
+
+        setConnection(newConnection);
+    }, []);
+
+    useEffect(() => {
+        if (connection) {
+            connection.start()
+                .then(result => {
+                    console.log('Connected!');
+
+                    connection.on('RefreshNotifications', async () => {
+                        await handleGetNotifications();
+                    });
+
+                })
+                .catch(e => console.log('Connection failed: ', e));
+        }
+    }, [connection]);
+
+    const handleGetNotifications = async () => {
+        const response = await getAsync(endpoints.notifications);
+
+        if (response.success) {
+            console.log(response)
+            setNotifications(response.result)
+        }
+    }
+
     return (
         <>
             <Box sx={{ flexGrow: 1 }}>
@@ -122,7 +164,7 @@ export const Navbar = () => {
                                 isLogued ? (
                                     <>
                                         <UserMenu urlPhoto={user?.urlPhoto} />
-                                        <Notifications />
+                                        <Notifications userNotifications={notifications} />
                                     </>
 
                                 ) : (

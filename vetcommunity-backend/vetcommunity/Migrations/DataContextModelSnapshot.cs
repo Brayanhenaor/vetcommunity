@@ -66,22 +66,22 @@ namespace vetcommunity.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "ab369647-3a27-4a31-aea3-5497857fc0fb",
-                            ConcurrencyStamp = "0d785b09-6303-405b-b7b4-ed20f9032cf0",
+                            Id = "062bd069-2c48-4b7c-849a-d833a9f213cb",
+                            ConcurrencyStamp = "b0404d5c-e76b-4973-9de6-38d6ad480fb3",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "ecff55f9-16a5-44e0-af0b-077e7f9d8a32",
-                            ConcurrencyStamp = "f3521ccc-91ec-41e9-be4c-f369036d16e7",
+                            Id = "055c0949-64e2-4ec6-a0d6-5492ccb27433",
+                            ConcurrencyStamp = "e059ee15-9ee9-405c-b1ac-290a036ea73b",
                             Name = "Normal",
                             NormalizedName = "NORMAL"
                         },
                         new
                         {
-                            Id = "949a17dc-cfd0-4683-840e-4d34fa441f2e",
-                            ConcurrencyStamp = "d20682dd-a839-4112-a0ce-edc37be5c8fa",
+                            Id = "ff78d007-ad91-46e3-86d1-92b8a705a1d6",
+                            ConcurrencyStamp = "e51fa051-1fb8-4760-a594-cde48886d5fd",
                             Name = "Vet",
                             NormalizedName = "VET"
                         });
@@ -176,8 +176,8 @@ namespace vetcommunity.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = "abe17ff6-3511-412f-ad72-5e79f5d8e40b",
-                            RoleId = "ab369647-3a27-4a31-aea3-5497857fc0fb"
+                            UserId = "a97b21c6-6ede-4b23-b654-7dabd3f21919",
+                            RoleId = "062bd069-2c48-4b7c-849a-d833a9f213cb"
                         });
                 });
 
@@ -276,6 +276,9 @@ namespace vetcommunity.Migrations
 
                     b.Property<string>("Message")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PostId")
+                        .HasColumnType("int");
 
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
@@ -446,17 +449,17 @@ namespace vetcommunity.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "abe17ff6-3511-412f-ad72-5e79f5d8e40b",
+                            Id = "a97b21c6-6ede-4b23-b654-7dabd3f21919",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "6f913829-2461-435c-a73c-3f7669d2ccef",
+                            ConcurrencyStamp = "3059e82f-35d9-4aee-a3a2-7c4501d23d34",
                             EmailConfirmed = false,
                             FullName = "User Admin",
                             IsVeterinary = false,
                             LockoutEnabled = false,
                             NormalizedUserName = "ADMIN@ADMIN.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAENdJqLyJAnQSsICJft8riNwoMIRt5/tvZGugsPbCHx4zsiTsw9JwHguxZGQuWYwObg==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEJnSOeQ8/sNX88CB/4+vCzGm2hOCPFnGyc75px1gQyr4GBTj78lJYhmKsinFW2ixhQ==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "fde847db-6bc4-4f36-8f06-6c045b733480",
+                            SecurityStamp = "c88d1105-978b-4df2-993f-76e87d778b99",
                             TwoFactorEnabled = false,
                             UrlPhoto = "https://cdn.now.howstuffworks.com/media-content/0b7f4e9b-f59c-4024-9f06-b3dc12850ab7-1920-1080.jpg",
                             UserName = "admin@admin.com"

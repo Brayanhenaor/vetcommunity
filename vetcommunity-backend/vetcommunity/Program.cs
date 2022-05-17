@@ -11,11 +11,16 @@ using Microsoft.OpenApi.Models;
 using vetcommunity.Data;
 using vetcommunity.Data.Entities;
 using vetcommunity.DTOs.Response;
+using vetcommunity.Extensions;
+using vetcommunity.Hubs;
 using vetcommunity.Profiles;
+using vetcommunity.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
+builder.Services.AddSignalR();
 
 builder.Services.AddControllers().AddNewtonsoftJson(x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -25,9 +30,10 @@ builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(
                           policy =>
-                              policy.AllowAnyOrigin()
+                              policy.WithOrigins("http://localhost:3000")
                               .AllowAnyHeader()
                               .AllowAnyMethod()
+                              .AllowCredentials()
                           );
 });
 
@@ -89,6 +95,23 @@ builder.Services.AddAuthentication(options =>
         ValidIssuer = builder.Configuration["JWT:Issuer"],
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"]))
     };
+    options.Events = new JwtBearerEvents
+    {
+        OnMessageReceived = context =>
+        {
+            var accessToken = context.Request.Query["access_token"];
+
+            // If the request is for our hub...
+            var path = context.HttpContext.Request.Path;
+            if (!string.IsNullOrEmpty(accessToken) &&
+                (path.StartsWithSegments("/notificationHub")))
+            {
+                // Read the token out of the query string
+                context.Token = accessToken;
+            }
+            return Task.CompletedTask;
+        }
+    };
 });
 
 builder.Services.AddAuthorization(options =>
@@ -129,6 +152,8 @@ builder.Services.AddSwaggerGen(c =>
     //c.IncludeXmlComments(rutaXML);
 });
 
+builder.Services.AddScoped<INotificationService, NotificationService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -145,6 +170,7 @@ app.UseCors();
 app.UseAuthorization();
 
 app.MapControllers();
-
+app.MapHub<NotificationHub>("/notificationHub");
+//app.UseJwtSignalRAuthentication();
 app.Run();
 

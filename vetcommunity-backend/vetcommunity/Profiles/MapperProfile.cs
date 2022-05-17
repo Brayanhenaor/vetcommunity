@@ -17,6 +17,7 @@
             CreateMap<CommentRequest, PostComment>();
             CreateMap<PostComment, CommentResponse>();
             CreateMap<CommentLike, PostCommentLikeResponse>();
+            CreateMap<Notification, NotificationResponse>();
         }
     }
 }

@@ -9,18 +9,18 @@ import { useDispatch, useSelector } from "react-redux";
 import { PublicRoute } from "./PublicRoute";
 import { Alert, Snackbar } from "@mui/material";
 import { hideSnack } from "../actions/ui";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { RegisterPage } from "../components/pages/register/RegisterPage";
-import axios from "axios";
 import { PrivateRouter } from "./PrivateRoute";
 import { MyQuestionsPage } from "../components/pages/myQuestions/MyQuestionsPage";
 import { SearchResultsPage } from "../components/pages/search/SearchResultsPage";
+import { PostPage } from "../components/pages/post/PostPage";
+
 
 export const AppRouter = () => {
     const { ui: { loading, snackbar }, auth } = useSelector(state => state);
     const { isLogued, token } = auth;
     const dispatch = useDispatch();
-
     const handleCloseSnack = () => {
         dispatch(hideSnack());
     }
@@ -80,6 +80,13 @@ export const AppRouter = () => {
                     element={
                         <PublicRoute
                             component={SearchResultsPage} />
+                    } />
+
+                <Route
+                    path={route.post}
+                    element={
+                        <PublicRoute
+                            component={PostPage} />
                     } />
 
                 <Route
