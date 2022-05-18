@@ -23,19 +23,18 @@ export const RegisterPage = () => {
     const dispatch = useDispatch();
 
     const onSubmit = async (data) => {
-        console.log("register data",data)
 
-       if(data.password != data.confirmPassword)
-         console.log("La contraseñas no coinciden");
-       
+
+       if(data.password != data.confirmPassword){
+          dispatch(showSnack('Las contraseñas no coinciden', 'error'));
+          return;
+       }
+
        setLoading(true);
        const response = await postAsync(endpoints.register, data);
        setLoading(false);
    
        dispatch(showSnack(response.success ? 'Registro de usuario exitoso' : response.message, response.success ? 'success' : 'error'));
-   
-       if (response.success)
-         dispatch(login(response.result));
    
        console.log(response)
     }

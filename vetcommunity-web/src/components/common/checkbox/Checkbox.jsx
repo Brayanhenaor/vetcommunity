@@ -1,5 +1,6 @@
 import { Checkbox as MCB } from '@mui/material'
 import { Box, styled } from '@mui/system'
+import { useFormContext } from 'react-hook-form';
 import { color } from '../../../utils/color';
 
 const StyledCheckBox = styled(MCB)({
@@ -17,10 +18,13 @@ const Span = styled('span')({
 });
 
 
-export const Checkbox = ({ label, ...props }) => {
+export const Checkbox = ({ label, name, validations={}, ...props }) => {
+    const { register } = useFormContext();
+
     return (
         <Box sx={{ display: 'flex', alignItems: 'center',mt:2 }}>
-            <StyledCheckBox {...props} />
+            <StyledCheckBox {...props} 
+            {...register(name, validations)}/>
             {
                 label && (
                     <Span>{label}</Span>

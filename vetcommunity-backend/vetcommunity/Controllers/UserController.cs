@@ -87,7 +87,7 @@ namespace vetcommunity.Controllers
             };
         }
 
-        [HttpPost("Registred")]
+        [HttpPost("Register")]
         public async Task<ActionResult<Response>> RegisterAsync(RegisterRequest registerRequest)
         {
             var userExists = await userManager.FindByEmailAsync(registerRequest.Email);
@@ -112,8 +112,13 @@ namespace vetcommunity.Controllers
             var result = await userManager.CreateAsync(user, registerRequest.Password);
 
             if (registerRequest.IsVeterinary)
+            {
                 await userManager.AddToRoleAsync(user, UserRole.Vet.ToString());
-
+            }
+            else {
+                await userManager.AddToRoleAsync(user, UserRole.Normal.ToString());
+            }
+                
             if (!result.Succeeded)
                 return NotFound(new Response<LoginResponse>
                 {
