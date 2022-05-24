@@ -14,6 +14,7 @@
         public DbSet<Category> Categories { get; set; }
         public DbSet<PostComment> PostComments { get; set; }
         public DbSet<CommentLike> CommentLikes { get; set; }
+        public DbSet<OtpCode> OtpCodes { get; set; }
 
         public DataContext(DbContextOptions<DataContext> options) : base(options) { }
 

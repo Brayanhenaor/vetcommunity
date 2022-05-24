@@ -24,4 +24,19 @@
 	<data name="AddRankingNotPermitted" xml:space="preserve">
 		<value>No puedes dar puntos a tu propia pregunta</value>
 	</data>
+	<data name="OtpExpired" xml:space="preserve">
+		<value>El codigo expiró, solicita uno nuevo</value>
+	</data>
+	<data name="OtpInvalid" xml:space="preserve">
+		<value>El codigo ingresado no es correcto</value>
+	</data>
+	<data name="UserAlreadyExists" xml:space="preserve">
+		<value>El usuario ya existe</value>
+	</data>
+	<data name="ErrorCreatingUser" xml:space="preserve">
+		<value>Ocurrió un error creando el usuario, intenta nuevamente</value>
+	</data>
+	<data name="EmailNoRegistered" xml:space="preserve">
+		<value>No existe un usuario con el email especificado</value>
+	</data>
 </root>

@@ -76,6 +76,42 @@ namespace vetcommunity.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No existe un usuario con el email especificado.
+        /// </summary>
+        internal static string EmailNoRegistered {
+            get {
+                return ResourceManager.GetString("EmailNoRegistered", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ocurrió un error creando el usuario, intenta nuevamente.
+        /// </summary>
+        internal static string ErrorCreatingUser {
+            get {
+                return ResourceManager.GetString("ErrorCreatingUser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to El codigo expiró, solicita uno nuevo.
+        /// </summary>
+        internal static string OtpExpired {
+            get {
+                return ResourceManager.GetString("OtpExpired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to El codigo ingresado no es correcto.
+        /// </summary>
+        internal static string OtpInvalid {
+            get {
+                return ResourceManager.GetString("OtpInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Se publicó el post exitosamente.
         /// </summary>
         internal static string PostPublished {
@@ -85,33 +121,20 @@ namespace vetcommunity.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to El usuario ya existe.
+        /// </summary>
+        internal static string UserAlreadyExists {
+            get {
+                return ResourceManager.GetString("UserAlreadyExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Verifique el email y contraseña.
         /// </summary>
         internal static string UserNotFound {
             get {
                 return ResourceManager.GetString("UserNotFound", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to Usuario ya existe.
-        /// </summary>
-        internal static string UserAlreadyExists
-        {
-            get
-            {
-                return ResourceManager.GetString("UserAlreadyExists", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to Error al crear el usuario.
-        /// </summary>
-        internal static string ErrorCreatingUser
-        {
-            get
-            {
-                return ResourceManager.GetString("ErrorCreatingUser", resourceCulture);
             }
         }
     }

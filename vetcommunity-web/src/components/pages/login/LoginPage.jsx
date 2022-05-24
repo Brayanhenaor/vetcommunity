@@ -64,8 +64,9 @@ export const LoginPage = () => {
       </Grid>
 
       <Grid container justifyContent={'center'} item xs={12}>
-        <span style={{ marginTop: '15px', cursor: 'pointer', color: color.secondary }}>¿Olvidaste tu contraseña?</span>
+        <span style={{ marginTop: '15px', cursor: 'pointer', color: color.secondary }}
+          onClick={() => navigate(route.recoverPassword)}>¿Olvidaste tu contraseña?</span>
       </Grid>
-    </FormCardImage>
+    </FormCardImage >
   )
 }

@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using System.Text;
+using Hangfire;
 using Laboratorio.Api.Filters;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -21,6 +22,9 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddSignalR();
+
+builder.Services.AddHangfire(x => x.UseSqlServerStorage(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddHangfireServer();
 
 builder.Services.AddControllers().AddNewtonsoftJson(x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -153,6 +157,7 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 builder.Services.AddScoped<INotificationService, NotificationService>();
+builder.Services.AddScoped<IMailService, MailService>();
 
 var app = builder.Build();
 
@@ -162,6 +167,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseHangfireDashboard("/mydashboard");
 
 app.UseHttpsRedirection();
 

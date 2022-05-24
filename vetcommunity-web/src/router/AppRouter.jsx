@@ -15,6 +15,7 @@ import { PrivateRouter } from "./PrivateRoute";
 import { MyQuestionsPage } from "../components/pages/myQuestions/MyQuestionsPage";
 import { SearchResultsPage } from "../components/pages/search/SearchResultsPage";
 import { PostPage } from "../components/pages/post/PostPage";
+import { RecoverPasswordPage } from "../components/pages/recoverPassword/RecoverPasswordPage";
 
 
 export const AppRouter = () => {
@@ -63,6 +64,16 @@ export const AppRouter = () => {
                             navBar={false}
                             isLogued={isLogued}
                             component={LoginPage} />
+                    } />
+
+                <Route
+                    path={route.recoverPassword}
+                    element={
+                        <PublicRoute
+                            restricted
+                            navBar={false}
+                            isLogued={isLogued}
+                            component={RecoverPasswordPage} />
                     } />
 
                 <Route

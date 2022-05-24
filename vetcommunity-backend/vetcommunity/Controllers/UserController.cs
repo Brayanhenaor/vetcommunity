@@ -3,14 +3,19 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using AutoMapper;
+using Hangfire;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using vetcommunity.Data;
 using vetcommunity.Data.Entities;
 using vetcommunity.DTOs.Request;
 using vetcommunity.DTOs.Response;
 using vetcommunity.Enums;
 using vetcommunity.Resources;
+using vetcommunity.Services;
 
 namespace vetcommunity.Controllers
 {
@@ -22,14 +27,18 @@ namespace vetcommunity.Controllers
         private readonly RoleManager<IdentityRole> roleManager;
         private readonly IConfiguration configuration;
         private readonly IMapper mapper;
+        private readonly DataContext dataContext;
+        private readonly IMailService mailService;
 
         public UserController(UserManager<User> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration,
-            IMapper mapper)
+            IMapper mapper, DataContext dataContext, IMailService mailService)
         {
             this.userManager = userManager;
             this.roleManager = roleManager;
             this.configuration = configuration;
             this.mapper = mapper;
+            this.dataContext = dataContext;
+            this.mailService = mailService;
         }
 
         [HttpPost("Login")]
@@ -115,10 +124,11 @@ namespace vetcommunity.Controllers
             {
                 await userManager.AddToRoleAsync(user, UserRole.Vet.ToString());
             }
-            else {
+            else
+            {
                 await userManager.AddToRoleAsync(user, UserRole.Normal.ToString());
             }
-                
+
             if (!result.Succeeded)
                 return NotFound(new Response<LoginResponse>
                 {
@@ -127,6 +137,80 @@ namespace vetcommunity.Controllers
                 });
 
             return new Response { Success = true, Message = "Usuario creado exitosamente" };
+        }
+
+        [HttpGet("GetOtp")]
+        public async Task<ActionResult<Response>> GenerateOtpAsync([FromQuery] OtpRequest otpRequest)
+        {
+            User user = await userManager.FindByNameAsync(otpRequest.Email);
+
+            if (user == null)
+                return BadRequest(new Response
+                {
+                    Success = false,
+                    Message = Messages.EmailNoRegistered
+                });
+
+
+            Random random = new Random();
+            int otpNumber = random.Next(100000, 999999);
+
+            OtpCode otpCode = new OtpCode
+            {
+                ExpireDate = DateTime.Now.AddMinutes(15).ToUniversalTime(),
+                GenerationDate = DateTime.UtcNow,
+                Otp = otpNumber.ToString(),
+                User = user
+            };
+
+            await dataContext.OtpCodes.AddAsync(otpCode);
+
+            await dataContext.SaveChangesAsync();
+
+            mailService.SendOtpMail(otpNumber.ToString(), otpRequest.Email);
+
+            BackgroundJob.Schedule(() => DeleteOtpRecord(otpCode.Id), TimeSpan.FromMinutes((otpCode.ExpireDate - DateTime.UtcNow).TotalMinutes));
+
+            return Created(string.Empty, new Response());
+        }
+
+        [HttpPost("ValidateOtp")]
+        public async Task<ActionResult<Response>> GenerateOtpAsync(ValidateOtpRequest validateOtpRequest)
+        {
+            User user = await userManager.FindByNameAsync(validateOtpRequest.Email);
+
+            if (user == null)
+                return BadRequest(new Response
+                {
+                    Success = false,
+                    Message = Messages.EmailNoRegistered
+                });
+
+            OtpCode otpCode = await dataContext.OtpCodes.OrderByDescending(otp => otp.GenerationDate).FirstOrDefaultAsync(otpCode => otpCode.UserId == user.Id);
+
+            if (otpCode == null)
+                return new Response
+                {
+                    Success = false,
+                    Message = Messages.OtpExpired
+                };
+
+            if (otpCode.Otp != validateOtpRequest.Otp)
+                return new Response
+                {
+                    Success = false,
+                    Message = Messages.OtpInvalid
+                };
+
+            return new Response();
+        }
+
+        [ApiExplorerSettings(IgnoreApi = true)]
+        public async Task DeleteOtpRecord(int id)
+        {
+            OtpCode otpCode = await dataContext.OtpCodes.FindAsync(id);
+            dataContext.OtpCodes.Remove(otpCode);
+            await dataContext.SaveChangesAsync();
         }
     }
 }

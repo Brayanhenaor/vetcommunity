@@ -6,4 +6,5 @@ export const route = {
     register: '/register',
     search: '/search/:query',
     post: '/post/:id',
+    recoverPassword: '/recoverPassword',
 }
