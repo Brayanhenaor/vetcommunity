@@ -92,7 +92,15 @@ namespace vetcommunity.Resources {
                 return ResourceManager.GetString("ErrorCreatingUser", resourceCulture);
             }
         }
-        
+
+        internal static string NoValidPassword
+        {
+            get
+            {
+                return ResourceManager.GetString("NoValidPassword", resourceCulture);
+            }
+        }
+
         /// <summary>
         ///   Looks up a localized string similar to El codigo expiró, solicita uno nuevo.
         /// </summary>
@@ -128,7 +136,15 @@ namespace vetcommunity.Resources {
                 return ResourceManager.GetString("UserAlreadyExists", resourceCulture);
             }
         }
-        
+
+        internal static string SuccesRecoverPassword
+        {
+            get
+            {
+                return ResourceManager.GetString("SuccesRecoverPassword", resourceCulture);
+            }
+        }
+
         /// <summary>
         ///   Looks up a localized string similar to Verifique el email y contraseña.
         /// </summary>

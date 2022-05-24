@@ -175,7 +175,7 @@ namespace vetcommunity.Controllers
         }
 
         [HttpPost("ValidateOtp")]
-        public async Task<ActionResult<Response>> GenerateOtpAsync(ValidateOtpRequest validateOtpRequest)
+        public async Task<ActionResult<Response<OtpSuccessResponse>>> GenerateOtpAsync(ValidateOtpRequest validateOtpRequest)
         {
             User user = await userManager.FindByNameAsync(validateOtpRequest.Email);
 
@@ -189,20 +189,49 @@ namespace vetcommunity.Controllers
             OtpCode otpCode = await dataContext.OtpCodes.OrderByDescending(otp => otp.GenerationDate).FirstOrDefaultAsync(otpCode => otpCode.UserId == user.Id);
 
             if (otpCode == null)
-                return new Response
+                return BadRequest(new Response
                 {
                     Success = false,
                     Message = Messages.OtpExpired
-                };
+                });
 
             if (otpCode.Otp != validateOtpRequest.Otp)
-                return new Response
+                return BadRequest(new Response
                 {
                     Success = false,
                     Message = Messages.OtpInvalid
-                };
+                });
 
-            return new Response();
+            return new Response<OtpSuccessResponse>
+            {
+                Result = new OtpSuccessResponse
+                {
+                    Token = await userManager.GeneratePasswordResetTokenAsync(user)
+                }
+            };
+        }
+
+        [HttpPut("RecoverPassword")]
+        public async Task<ActionResult<Response>> ChangePasswordAsync(RecoverPasswordRequest recoverPasswordRequest)
+        {
+            User user = await userManager.FindByNameAsync(recoverPasswordRequest.Email);
+
+            if (user == null)
+                return BadRequest(new Response
+                {
+                    Success = false,
+                    Message = Messages.EmailNoRegistered
+                });
+
+            IdentityResult result = await userManager.ResetPasswordAsync(user, recoverPasswordRequest.Token, recoverPasswordRequest.Password);
+
+            return new Response
+            {
+                Success= result.Succeeded,
+                Message = result.Succeeded ? Messages.SuccesRecoverPassword : Messages.NoValidPassword
+            };
+
+
         }
 
         [ApiExplorerSettings(IgnoreApi = true)]

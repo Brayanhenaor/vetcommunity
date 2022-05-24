@@ -13,4 +13,5 @@ export const endpoints = {
     register: '/User/Register',
     getOtp: '/User/GetOtp',
     validateOtp: '/User/ValidateOtp',
+    recoverPassword: '/User/RecoverPassword'
 }

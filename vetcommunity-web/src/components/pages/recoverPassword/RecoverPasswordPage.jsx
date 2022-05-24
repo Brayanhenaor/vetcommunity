@@ -7,20 +7,25 @@ import OtpInput from 'react-otp-input';
 import { Input } from '../../common/input/Input';
 import { Button } from '../../common/button/Button';
 import { useLoading } from '../../../hooks/useLoading';
-import { getAsync, postAsync } from '../../../api/apiService';
+import { getAsync, postAsync, putAsync } from '../../../api/apiService';
 import { endpoints } from '../../../api/endpoint';
 import { color } from '../../../utils/color';
 import { useDispatch } from 'react-redux';
 import { showSnack } from '../../../actions/ui';
+import { useNavigate } from 'react-router-dom';
+import { route } from '../../../router/routes';
 
 export const RecoverPasswordPage = () => {
     const [hasOtp, setHasOtp] = useState(false);
     const [validOtp, setValidOtp] = useState(false);
     const [otp, setOtp] = useState("");
+    const [token, setToken] = useState("");
     const setLoading = useLoading();
     const dispatch = useDispatch();
     const methods = useForm();
     const { getValues } = methods;
+
+    const navigate = useNavigate();
 
     const onSubmit = async ({ email }) => {
         setLoading(true);
@@ -44,13 +49,35 @@ export const RecoverPasswordPage = () => {
 
     };
 
+    const handleChangePassword = async () => {
+        const { password, confirmPassword, email } = getValues();
+
+        if (password !== confirmPassword) {
+            dispatch(showSnack("Las contraseñas deben coincidir", 'error'));
+            return;
+        }
+
+        setLoading(true);
+        const response = await putAsync(endpoints.recoverPassword, { password, email, token });
+        setLoading(false);
+
+        dispatch(showSnack(response.message, response.success ? 'success' : 'error'));
+
+        if (response.success)
+            navigate(route.login);
+
+        console.log(password, confirmPassword);
+    }
+
     const handleValidateOtp = async (otp) => {
         setLoading(true);
         const response = await postAsync(endpoints.validateOtp, { email: getValues("email"), otp });
         setLoading(false);
 
-        if (response.success)
+        if (response.success) {
             setValidOtp(true);
+            setToken(response.result?.token);
+        }
         console.log(response);
     }
 
@@ -118,16 +145,18 @@ export const RecoverPasswordPage = () => {
                     <>
                         <Grid item xs={12}>
                             <Input
+                                type="password"
                                 label="Nueva Contraseña"
                                 name="password" />
                         </Grid>
                         <Grid item xs={12}>
                             <Input
+                                type="password"
                                 label="Confirmar Contraseña"
-                                name="password" />
+                                name="confirmPassword" />
                         </Grid>
                         <Grid item xs={12}>
-                            <Button>Guardar</Button>
+                            <Button onClick={handleChangePassword}>Guardar</Button>
                         </Grid>
                     </>
                 )

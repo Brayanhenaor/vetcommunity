@@ -39,4 +39,10 @@
 	<data name="EmailNoRegistered" xml:space="preserve">
 		<value>No existe un usuario con el email especificado</value>
 	</data>
+	<data name="SuccesRecoverPassword" xml:space="preserve">
+		<value>Inicia sesion con tu nueva contraseña</value>
+	</data>
+	<data name="NoValidPassword" xml:space="preserve">
+		<value>La contraseña no cumple los requisitos de seguridad, intenta nuevamente.</value>
+	</data>
 </root>
