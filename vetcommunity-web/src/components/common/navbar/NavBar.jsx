@@ -66,7 +66,7 @@ const menu = [
     },
     {
         title: 'Perfil',
-        to: 'profile'
+        to: route.profile
     },
 ]
 

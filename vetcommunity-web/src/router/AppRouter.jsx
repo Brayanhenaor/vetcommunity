@@ -98,6 +98,15 @@ export const AppRouter = () => {
                             component={MyQuestionsPage} />
                     } />
 
+                <Route
+                    path={route.profile}
+                    element={
+                        <PrivateRouter
+                            restricted
+                            isLogued={isLogued}
+                            component={ProfilePage} />
+                    } />
+
                 <Route path="*" element={<Navigate to={route.home} />} />
             </Routes>
         </div>
