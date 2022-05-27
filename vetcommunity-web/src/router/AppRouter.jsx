@@ -16,6 +16,7 @@ import { MyQuestionsPage } from "../components/pages/myQuestions/MyQuestionsPage
 import { SearchResultsPage } from "../components/pages/search/SearchResultsPage";
 import { PostPage } from "../components/pages/post/PostPage";
 import { RecoverPasswordPage } from "../components/pages/recoverPassword/RecoverPasswordPage";
+import axios from "axios";
 
 
 export const AppRouter = () => {
@@ -27,6 +28,10 @@ export const AppRouter = () => {
     }
 
     useEffect(() => {
+        if (isLogued) {
+            axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+        }
+
         if (isLogued) {
             localStorage.setItem('VETUSER', JSON.stringify(auth));
             return;

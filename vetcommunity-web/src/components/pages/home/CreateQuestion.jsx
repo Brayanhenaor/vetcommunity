@@ -54,6 +54,8 @@ export const CreateQuestion = () => {
             categories: data.categories.map(category => ({ id: categories.result.find(c => c.name === category).id }))
         });
 
+        console.log(response)
+
         setLoading(false);
 
         if (!response.success) {
